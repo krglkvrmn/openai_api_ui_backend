@@ -127,3 +127,7 @@ cython_debug/
 
 # Secrets
 .secret/
+
+# Data
+data/
+initialize_db.py
