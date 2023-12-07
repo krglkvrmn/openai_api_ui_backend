@@ -131,3 +131,6 @@ cython_debug/
 # Data
 data/
 initialize_db.py
+
+# MacOS specific
+.DS_store
