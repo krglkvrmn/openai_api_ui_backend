@@ -134,3 +134,6 @@ initialize_db.py
 
 # MacOS specific
 .DS_store
+
+# Alembic
+alembic.ini

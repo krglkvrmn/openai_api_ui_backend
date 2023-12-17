@@ -1,15 +1,16 @@
 import datetime
+from typing import Optional
 
 from pydantic import BaseModel
 
-from app.schemas.app.message import MessageBase, Message, MessageCreate
+from app.schemas.app.message import MessageBase, Message, MessageCreate, MessageOverview
 
 
 class ChatBase(BaseModel):
     title: str
     model: str
-    created_at: datetime.datetime
-    last_updated: datetime.datetime
+    created_at: Optional[datetime.datetime] = None
+    last_updated: Optional[datetime.datetime] = None
 
 
 class ChatCreate(ChatBase):
@@ -28,5 +29,5 @@ class ChatOverview(ChatBase):
     id: int
 
 
-class SingleChatResponse(ChatBase):
-    messages: list[Message | MessageCreate]
+class ChatWithMessageOverview(ChatOverview):
+    messages: list[MessageOverview]

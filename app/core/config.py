@@ -9,7 +9,8 @@ APP_ROOT = Path(__file__).parent.parent
 
 load_dotenv(APP_ROOT / ".env")
 load_dotenv(APP_ROOT / ".secret" / "access_token_secret_key.env")
-load_dotenv(APP_ROOT / ".refresh" / "access_token_secret_key.env")
+load_dotenv(APP_ROOT / ".secret" / "refresh_token_secret_key.env")
+load_dotenv(APP_ROOT / ".secret" / "key_encode_secret_key.env")
 
 COMPLETIONS_API_DEBUG_RESPONSE = {
     "id": "chatcmpl-123",
@@ -93,6 +94,7 @@ PG_ENGINE = os.getenv("PG_ENGINE")
 SQL_DATABASE_URL = f'postgresql+{PG_ENGINE}://{PG_USER}:{PG_PASSWORD}@{PG_HOST}/{PG_DB}'
 
 # External APIs
+KEY_ENCODE_SECRET_KEY = os.getenv("KEY_ENCODE_SECRET_KEY")
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 OPENAI_API_ENDPOINTS = {
     "completions": {"method": "POST", "url": "https://api.openai.com/v1/chat/completions"}
@@ -102,8 +104,8 @@ OPENAI_API_ENDPOINTS = {
 ACCESS_TOKEN_SECRET_KEY = os.getenv("ACCESS_TOKEN_SECRET_KEY")
 REFRESH_TOKEN_SECRET_KEY = os.getenv("REFRESH_TOKEN_SECRET_KEY")
 
-ACCESS_TOKEN_LIFETIME = os.getenv("ACCESS_TOKEN_LIFETIME")
-REFRESH_TOKEN_LIFETIME = os.getenv("REFRESH_TOKEN_LIFETIME")
+ACCESS_TOKEN_LIFETIME = int(os.getenv("ACCESS_TOKEN_LIFETIME"))
+REFRESH_TOKEN_LIFETIME = int(os.getenv("REFRESH_TOKEN_LIFETIME"))
 
-ACCESS_TOKEN_COOKIE_LIFETIME = os.getenv("ACCESS_TOKEN_COOKIE_LIFETIME")
-REFRESH_TOKEN_COOKIE_LIFETIME = os.getenv("REFRESH_TOKEN_COOKIE_LIFETIME")
+ACCESS_TOKEN_COOKIE_LIFETIME = int(os.getenv("ACCESS_TOKEN_COOKIE_LIFETIME"))
+REFRESH_TOKEN_COOKIE_LIFETIME = int(os.getenv("REFRESH_TOKEN_COOKIE_LIFETIME"))

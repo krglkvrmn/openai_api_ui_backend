@@ -1,3 +1,5 @@
+import datetime
+
 from fastapi import HTTPException, Depends
 from sqlalchemy import desc, select, Select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
@@ -6,7 +8,7 @@ from sqlalchemy.orm import Session, selectinload, joinedload, aliased, contains_
 from app.auth.schemas import UserRead
 from app.db.models import message as message_models, chat as chat_models, prompt as prompt_models
 from app.schemas import Author
-from app.schemas.app.chat import ChatCreate, ChatRead
+from app.schemas.app.chat import ChatCreate, ChatRead, ChatOverview
 from app.schemas.app.message import MessageCreate, Message
 
 
@@ -34,11 +36,21 @@ class ChatService:
         return select(message_models.Message).where(message_models.Message.id == message_id)
 
     @staticmethod
+    def select_user_message_by_id_query(message_id: int, user: UserRead) -> Select:
+        return select(message_models.Message) \
+                .join(chat_models.Chat, message_models.Message.chat_id == chat_models.Chat.id) \
+                .where(message_models.Message.id == message_id, chat_models.Chat.user_id == user.id)
+
+    @staticmethod
     def select_system_prompt_by_content_query(content: str) -> Select:
         return select(prompt_models.SystemPrompt).where(prompt_models.SystemPrompt.content == content)
 
-    @staticmethod
-    async def add_message(session: AsyncSession, message: MessageCreate):
+    @classmethod
+    async def add_message(cls, session: AsyncSession, user: UserRead, message: MessageCreate):
+        user_check_query = cls.select_user_chat_by_id_query(message.chat_id, user=user)
+        user_check_result = await session.execute(user_check_query)
+        if not user_check_result.one_or_none():
+            raise HTTPException(status_code=404, detail='Chat not found')
         message = message_models.Message.from_pydantic(message)
         session.add(message)
         await session.commit()
@@ -87,7 +99,7 @@ class ChatService:
         return chat
 
     @classmethod
-    async def update_chat(cls, session: AsyncSession, user: UserRead, chat: ChatRead):
+    async def update_chat(cls, session: AsyncSession, user: UserRead, chat: ChatOverview):
         query = cls.select_user_chat_by_id_query(chat.id, user=user)
         result = await session.execute(query)
         db_chat = result.scalar_one_or_none()
@@ -96,14 +108,10 @@ class ChatService:
 
         db_chat.title = chat.title
         db_chat.model = chat.model
-        db_chat.last_updated = chat.last_updated
-
-        for message in chat.messages:
-            if isinstance(message, MessageCreate):
-                await cls.add_message(session=session, message=message)
+        db_chat.last_updated = chat.last_updated or datetime.datetime.utcnow()
 
         await session.commit()
-        await session.refresh(db_chat, ['messages'])
+        await session.refresh(db_chat)
         return db_chat
 
     @classmethod
@@ -118,10 +126,13 @@ class ChatService:
         return db_chat
 
     @classmethod
-    async def get_message(cls, session: AsyncSession, message_id: int):
-        query = cls.select_message_by_id_query(message_id)
+    async def get_message(cls, session: AsyncSession, user: UserRead, message_id: int):
+        query = cls.select_user_message_by_id_query(message_id, user=user)
         result = await session.execute(query)
-        return result.scalar_one()
+        message = result.scalar_one_or_none()
+        if not message:
+            raise HTTPException(status_code=404, detail="Message not found")
+        return message
 
     @classmethod
     async def get_chat(cls, session: AsyncSession, user: UserRead, chat_id: int):

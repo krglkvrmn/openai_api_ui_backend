@@ -2,7 +2,7 @@ import datetime
 from dataclasses import dataclass
 
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID, SQLAlchemyUserDatabase
-from sqlalchemy import Boolean, DateTime, select
+from sqlalchemy import Boolean, DateTime, select, String
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 
@@ -21,6 +21,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
         default=lambda: datetime.datetime.utcnow(),
         nullable=False
     )
+    api_key: Mapped["APIKey"] = relationship(back_populates="user", cascade='all, delete-orphan')
     chats: Mapped[list["Chat"]] = relationship(back_populates="user", cascade='all, delete-orphan')
     prompts: Mapped[list["SystemPrompt"]] = relationship(back_populates="user", cascade='all, delete-orphan')
 

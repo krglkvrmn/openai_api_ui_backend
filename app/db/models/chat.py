@@ -9,7 +9,6 @@ import app.schemas.app.chat
 from app.auth.schemas import UserRead
 from app.db.session import Base
 from app.db.models.message import Message
-from app.schemas.app import prompt
 
 
 @dataclass
