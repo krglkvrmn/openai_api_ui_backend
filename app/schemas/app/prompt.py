@@ -6,11 +6,11 @@ class SystemPromptCreate(BaseModel):
     popularity: int
 
 
-class SystemPrompt(SystemPromptCreate):
+class SystemPromptRead(SystemPromptCreate):
     id: int
 
     class Config:
         from_attributes = True
 
 
-SystemPromptResponse = SystemPromptCreate
+SystemPromptResponse = SystemPromptRead

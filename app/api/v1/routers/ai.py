@@ -15,15 +15,23 @@ ai_router = APIRouter(prefix="/ai", tags=["ai"])
 
 @ai_router.post('/createCompletion')
 async def create_completion(
+        request: Request,
         uow: AsyncUOWDep,
         user: CurrentActiveUserDep,
         request_params: ChatCompletionsRequest,
         debug: bool = False
 ):
     if request_params.stream and not debug:
-        api_tokens = await ProfileService.get_api_tokens(user=user, session=uow, trim=False)
+        request_api_token = request.headers.get('x-openai-auth-token')
+        if request_api_token is not None:
+            api_token = request_api_token
+        else:
+            api_tokens = await ProfileService.get_api_tokens(user=user, session=uow, trim=False)
+            api_token = api_tokens[0].key
         streamer = AIService.api_proxy_streamer(
-            api_token=api_tokens[0].key, request_params=request_params, endpoint_name='completions'
+            api_token=api_token,
+            request_params=request_params,
+            endpoint_name='completions'
         )
         return StreamingResponse(streamer)
     elif request_params.stream and debug:

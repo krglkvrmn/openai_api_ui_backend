@@ -1,3 +1,4 @@
+import math
 import uuid
 from collections.abc import Sequence
 
@@ -35,7 +36,8 @@ class ProfileService:
 
         for idx, token_data in enumerate(tokens_data):
             decrypted_key = crypto.decrypt(token_data.key)
-            key = f'*****{decrypted_key[-20:]}' if trim else decrypted_key
+            key_trim_length = math.ceil(len(decrypted_key) * 0.2)
+            key = f'*****{decrypted_key[-key_trim_length:]}' if trim else decrypted_key
             tokens_data[idx].key = key
         return tokens_data
 

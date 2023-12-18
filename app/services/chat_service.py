@@ -77,8 +77,10 @@ class ChatService:
         return result.scalars().all()
 
     @staticmethod
-    async def delete_system_prompt(session: AsyncSession, prompt_id: int):
-        query = select(prompt_models.SystemPrompt).where(prompt_models.SystemPrompt.id == prompt_id)
+    async def delete_system_prompt(session: AsyncSession, user: UserRead, prompt_id: int):
+        query = select(prompt_models.SystemPrompt).where(
+            prompt_models.SystemPrompt.id == prompt_id, prompt_models.SystemPrompt.user_id == user.id
+        )
         result = await session.execute(query)
         db_prompt = result.scalar_one_or_none()
         if not db_prompt:
