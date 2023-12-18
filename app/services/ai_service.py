@@ -19,8 +19,8 @@ class AIService:
         yield 'data: [DONE]'
 
     @classmethod
-    async def api_proxy_streamer(cls, request_params: ChatCompletionsRequest, endpoint_name: str):
-        headers = {"Authorization": f"Bearer {OPENAI_API_KEY}"}
+    async def api_proxy_streamer(cls, api_token: str, request_params: ChatCompletionsRequest, endpoint_name: str):
+        headers = {"Authorization": f"Bearer {api_token}"}
         params = request_params.model_dump(mode="json", exclude_none=True)
         async with httpx.AsyncClient() as client:
             async with client.stream(

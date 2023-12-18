@@ -1,13 +1,14 @@
+import uuid
+from collections.abc import Sequence
+
 from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette import status
-from starlette.responses import Response
 
 from app.auth.schemas import UserRead
 from app.core import crypto
 import app.db.models.key as key_models
-from app.schemas.app.key import APIKeyCreate, APIKeyRead
+from app.schemas.app.key import APIKeyCreate, APIKeyRead, APIKeyBase
 
 
 class ProfileService:
@@ -25,17 +26,23 @@ class ProfileService:
         return db_record
 
     @staticmethod
-    async def get_api_token(user: UserRead, session: AsyncSession) -> str:
-        query = select(key_models.APIKey.key).where(key_models.APIKey.user_id == user.id)
+    async def get_api_tokens(user: UserRead, session: AsyncSession, trim: bool = True) -> list[APIKeyRead]:
+        query = select(key_models.APIKey).where(key_models.APIKey.user_id == user.id)
         results = await session.execute(query)
-        encrypted_key = results.scalar_one_or_none()
-        if not encrypted_key:
+        tokens_data = [APIKeyRead.model_validate(res) for res in results.scalars().all()]
+        if not tokens_data:
             raise HTTPException(status_code=404, detail="User does not have api keys")
-        return crypto.decrypt(encrypted_key)
+
+        for idx, token_data in enumerate(tokens_data):
+            decrypted_key = crypto.decrypt(token_data.key)
+            key = f'*****{decrypted_key[-20:]}' if trim else decrypted_key
+            tokens_data[idx].key = key
+        return tokens_data
 
     @staticmethod
-    async def delete_api_token(user: UserRead, session: AsyncSession) -> APIKeyRead:
-        query = select(key_models.APIKey).where(key_models.APIKey.user_id == user.id)
+    async def delete_api_token(user: UserRead, session: AsyncSession, key_id: uuid.UUID) -> APIKeyRead:
+        query = select(key_models.APIKey).where(
+            key_models.APIKey.user_id == user.id, key_models.APIKey.id == key_id)
         results = await session.execute(query)
         token_data = results.scalar_one_or_none()
         if not token_data:
