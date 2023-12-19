@@ -8,5 +8,6 @@ cors_middleware = partial(
     allow_origins=['http://localhost:3001'],
     allow_methods=['*'],
     allow_headers=['*'],
+    expose_headers=['Location'],
     allow_credentials=True
 )
