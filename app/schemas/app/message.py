@@ -24,8 +24,9 @@ class Message(MessageBase):
         from_attributes = True
 
 
-class MessageOverview(MessageBase):
+class MessageOverview(BaseModel):
     id: int
     author: Author
+    chat_id: int
     created_at: Optional[datetime.datetime]
 

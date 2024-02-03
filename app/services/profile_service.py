@@ -31,8 +31,6 @@ class ProfileService:
         query = select(key_models.APIKey).where(key_models.APIKey.user_id == user.id)
         results = await session.execute(query)
         tokens_data = [APIKeyRead.model_validate(res) for res in results.scalars().all()]
-        if not tokens_data:
-            raise HTTPException(status_code=404, detail="User does not have api keys")
 
         for idx, token_data in enumerate(tokens_data):
             decrypted_key = crypto.decrypt(token_data.key)
