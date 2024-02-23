@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from app.schemas.app.message import MessageBase, Message, MessageCreate, MessageOverview
+from app.schemas.app.message import MessageInNewChatCreate, MessageInfoRead
 
 
 class ChatBase(BaseModel):
@@ -13,21 +13,20 @@ class ChatBase(BaseModel):
     last_updated: Optional[datetime.datetime] = None
 
 
-class ChatCreate(ChatBase):
-    messages: list[MessageBase] = []
-
-
 class ChatRead(ChatBase):
     id: int
-    messages: list[Message | MessageCreate] = []
 
     class Config:
         from_attributes = True
 
 
-class ChatOverview(ChatBase):
-    id: int
+class ChatInfoRead(ChatRead):
+    pass
 
 
-class ChatWithMessageOverview(ChatOverview):
-    messages: list[MessageOverview]
+class ChatFullRead(ChatRead):
+    messages: list[MessageInfoRead] = []
+
+
+class ChatFullCreate(ChatBase):
+    messages: list[MessageInNewChatCreate] = []

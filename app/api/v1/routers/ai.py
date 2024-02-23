@@ -1,9 +1,9 @@
-import asyncio
+import datetime
 import datetime
 import json
 import uuid
 
-from fastapi import APIRouter, Request, HTTPException, Response
+from fastapi import APIRouter, HTTPException, Request, Response
 from starlette import status
 from starlette.responses import StreamingResponse
 
@@ -11,7 +11,7 @@ from app.core import crypto
 from app.dependencies.db import AsyncUOWDep, RedisDep
 from app.dependencies.users import CurrentActiveUserDep
 from app.schemas.app.sessions import SessionToken
-from app.schemas.openai.completions import ChatCompletionsResponse, ChatCompletionsResponseChunk, ChatCompletionsRequest
+from app.schemas.openai.completions import ChatCompletionsRequest
 from app.services.ai_service import AIService
 from app.services.profile_service import ProfileService
 

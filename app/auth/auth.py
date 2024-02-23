@@ -1,15 +1,19 @@
 import uuid
 from typing import Optional
 
-from fastapi import Request, Depends
-from fastapi_users import UUIDIDMixin, BaseUserManager, FastAPIUsers
+from fastapi import Depends, Request
+from fastapi_users import BaseUserManager, FastAPIUsers, UUIDIDMixin
 from fastapi_users.authentication import AuthenticationBackend, CookieTransport, JWTStrategy
 
 from app.auth.database import User, get_user_db
-from app.core.config import ACCESS_TOKEN_SECRET_KEY, ACCESS_TOKEN_LIFETIME, REFRESH_TOKEN_SECRET_KEY, \
-    REFRESH_TOKEN_LIFETIME, ACCESS_TOKEN_COOKIE_LIFETIME, REFRESH_TOKEN_COOKIE_LIFETIME
-from app.patches.auth import AccessRefreshTokensCookieTransport, AccessRefreshAuthenticationBackend, \
+from app.core.config import (
+    ACCESS_TOKEN_COOKIE_LIFETIME, ACCESS_TOKEN_LIFETIME, ACCESS_TOKEN_SECRET_KEY,
+    REFRESH_TOKEN_COOKIE_LIFETIME, REFRESH_TOKEN_LIFETIME, REFRESH_TOKEN_SECRET_KEY
+)
+from app.patches.auth import (
+    AccessRefreshAuthenticationBackend, AccessRefreshTokensCookieTransport,
     JWTWithRefreshStrategyWriteOnly
+)
 
 
 def get_at_jwt_strategy() -> JWTStrategy:

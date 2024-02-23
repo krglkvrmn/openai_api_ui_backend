@@ -3,9 +3,8 @@ import json
 
 import httpx
 
-from app.core.config import OPENAI_API_ENDPOINTS, OPENAI_API_KEY, COMPLETIONS_API_DEBUG_RESPONSE, \
-    COMPLETIONS_API_STREAM_DEBUG_RESPONSE
-from app.schemas.openai.completions import ChatCompletionsRequest, ChatCompletionsResponseChunk
+from app.core.config import COMPLETIONS_API_STREAM_DEBUG_RESPONSE, OPENAI_API_ENDPOINTS
+from app.schemas.openai.completions import ChatCompletionsRequest
 
 
 class AIService:

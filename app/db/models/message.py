@@ -1,13 +1,12 @@
 import datetime
 from dataclasses import dataclass
 
-from sqlalchemy import Integer, Enum, Text, ForeignKey, DateTime
+from sqlalchemy import DateTime, Enum, ForeignKey, Integer, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-import app.schemas.app.message
 from app.db.session import Base
 from app.schemas import Author
-from app.schemas.app import prompt
+from app.schemas.app.message import MessageBase
 
 
 @dataclass
@@ -23,6 +22,6 @@ class Message(Base):
     chat: Mapped["Chat"] = relationship(back_populates="messages")
 
     @staticmethod
-    def from_pydantic(message: app.schemas.app.message.MessageBase):
-        message = message.model_dump()
+    def from_pydantic(message: MessageBase) -> "Message":
+        message = message.model_dump(mode='python')
         return Message(**message)

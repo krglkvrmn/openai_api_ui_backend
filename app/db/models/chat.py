@@ -1,17 +1,15 @@
 import datetime
 import uuid
-from dataclasses import dataclass
 
-from sqlalchemy import Integer, String, DateTime, UUID, ForeignKey
+from sqlalchemy import DateTime, ForeignKey, Integer, String, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-import app.schemas.app.chat
 from app.auth.schemas import UserRead
-from app.db.session import Base
 from app.db.models.message import Message
+from app.db.session import Base
+from app.schemas.app.chat import ChatBase
 
 
-@dataclass
 class Chat(Base):
     __tablename__ = "chats"
 
@@ -28,8 +26,9 @@ class Chat(Base):
     user: Mapped["User"] = relationship(back_populates="chats")
 
     @staticmethod
-    def from_pydantic(chat: app.schemas.app.chat.ChatBase, user: UserRead):
-        chat = chat.model_dump()
-        messages = [Message(**message) for message in chat.pop("messages")]
-        chat = Chat(**chat, messages=messages, user_id=user.id)
-        return chat
+    def from_pydantic(chat: ChatBase, user: UserRead = None) -> "Chat":
+        chat = chat.model_dump(mode='python')
+        orm_messages = [Message(**message) for message in chat.pop("messages", [])]
+        user_id = user.id if user is not None else None
+        orm_chat = Chat(**chat, messages=orm_messages, user_id=user_id)
+        return orm_chat

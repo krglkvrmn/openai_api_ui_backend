@@ -1,10 +1,11 @@
 import uuid
 
-from sqlalchemy import Integer, Text, UUID, ForeignKey
+from sqlalchemy import ForeignKey, Integer, Text, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.auth.schemas import UserRead
 from app.db.session import Base
-from app.schemas.app import prompt
+from app.schemas.app.prompt import SystemPromptCreate
 
 
 class SystemPrompt(Base):
@@ -18,6 +19,7 @@ class SystemPrompt(Base):
     user: Mapped["User"] = relationship(back_populates='prompts')
 
     @staticmethod
-    def from_pydantic(prompt: prompt.SystemPromptCreate):
-        prompt = prompt.model_dump()
-        return SystemPrompt(**prompt)
+    def from_pydantic(prompt: SystemPromptCreate, user: UserRead = None) -> "SystemPrompt":
+        prompt = prompt.model_dump(mode='python')
+        user_id = user.id if user else None
+        return SystemPrompt(**prompt, user_id=user_id)

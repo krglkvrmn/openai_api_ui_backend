@@ -1,15 +1,14 @@
 import math
 import uuid
-from collections.abc import Sequence
 
 from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+import app.db.models.key as key_models
 from app.auth.schemas import UserRead
 from app.core import crypto
-import app.db.models.key as key_models
-from app.schemas.app.key import APIKeyCreate, APIKeyRead, APIKeyBase
+from app.schemas.app.key import APIKeyCreate, APIKeyRead
 
 
 class ProfileService:

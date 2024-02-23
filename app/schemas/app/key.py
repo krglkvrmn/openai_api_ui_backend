@@ -7,18 +7,16 @@ class APIKeyBase(BaseModel):
     key: str
 
 
-class APIKeyReadShort(APIKeyBase):
+class APIKeyRead(APIKeyBase):
     id: uuid.UUID
 
     class Config:
         from_attributes = True
 
 
-class APIKeyRead(APIKeyReadShort):
+class APIKeyWithUserRead(APIKeyRead):
     user_id: uuid.UUID
 
-    class Config:
-        from_attributes = True
 
-
-APIKeyCreate = APIKeyBase
+class APIKeyCreate(APIKeyBase):
+    pass

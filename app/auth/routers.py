@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from app.auth.auth import get_user_manager, fastapi_users_at, fastapi_users, at_auth_backend, at_rt_auth_backend
-from app.auth.schemas import UserRead, UserCreate, UserUpdate, UserReadShort
+from app.auth.auth import at_rt_auth_backend, fastapi_users, fastapi_users_at
+from app.auth.schemas import UserCreate, UserReadShort, UserUpdate
 from app.dependencies.users import CurrentActiveUserDep
 
 auth_router = APIRouter(prefix='')

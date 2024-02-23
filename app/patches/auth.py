@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
 from fastapi import Response, status
-from fastapi_users.authentication import AuthenticationBackend, Transport, CookieTransport
 from fastapi_users import models
+from fastapi_users.authentication import CookieTransport
 from fastapi_users.authentication.strategy import StrategyDestroyNotSupportedError
 from fastapi_users.authentication.transport import TransportLogoutNotSupportedError
 from fastapi_users.types import DependencyCallable

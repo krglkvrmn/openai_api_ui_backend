@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from starlette.middleware import Middleware
 
 from app.api.main_router import main_router
 from app.auth.routers import fastapi_users, auth_router
@@ -15,13 +14,11 @@ app.include_router(auth_router)
 
 @app.on_event("startup")
 def startup_event():
-    print('Scheduler started')
     scheduler.start()
 
 
 @app.on_event("shutdown")
 def shutdown_event():
-    print('Scheduler shut down')
     scheduler.shutdown()
 
 

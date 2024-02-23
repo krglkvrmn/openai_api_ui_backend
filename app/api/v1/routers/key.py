@@ -6,7 +6,7 @@ from starlette.responses import Response
 
 from app.dependencies.db import AsyncUOWDep
 from app.dependencies.users import CurrentActiveUserDep
-from app.schemas.app.key import APIKeyCreate, APIKeyBase, APIKeyReadShort
+from app.schemas.app.key import APIKeyCreate, APIKeyRead
 from app.services.profile_service import ProfileService
 
 keys_router = APIRouter(prefix="/keys", tags=["keys"])
@@ -18,7 +18,7 @@ async def save_api_token(api_token: APIKeyCreate, user: CurrentActiveUserDep, uo
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@keys_router.get('/list', response_model=list[APIKeyReadShort])
+@keys_router.get('/list', response_model=list[APIKeyRead])
 async def get_api_tokens(user: CurrentActiveUserDep, uow: AsyncUOWDep):
     return await ProfileService.get_api_tokens(session=uow, user=user, trim=True)
 

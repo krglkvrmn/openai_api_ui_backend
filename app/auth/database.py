@@ -1,19 +1,15 @@
 import datetime
-from dataclasses import dataclass
 
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID, SQLAlchemyUserDatabase
-from sqlalchemy import Boolean, DateTime, select, String
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import Mapped, relationship, mapped_column
+from sqlalchemy import Boolean, DateTime, select
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.auth.schemas import UserRead
 from app.core.config import GUEST_ACCOUNT_LIVE_TIME
-from app.db.session import Base, AsyncDBSession
+from app.db.session import AsyncDBSession, Base
 from app.dependencies.db import AsyncUOWDep
 from app.utils.uow import AsyncUOW
 
 
-@dataclass
 class User(SQLAlchemyBaseUserTableUUID, Base):
     is_guest: Mapped[bool] = mapped_column(Boolean, default=False)
     datetime_registered: Mapped[datetime.datetime] = mapped_column(
