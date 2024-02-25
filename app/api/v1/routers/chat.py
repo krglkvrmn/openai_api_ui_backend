@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from app.dependencies.db import AsyncUOWDep
 from app.dependencies.users import CurrentActiveUserDep
-from app.schemas.app.chat import ChatBase, ChatFullCreate, ChatFullRead, ChatInfoRead
+from app.schemas.app.chat import ChatFullCreate, ChatFullRead, ChatInfoRead, ChatRead
 from app.services.chat_service import ChatService
 
 chat_router = APIRouter(prefix="/chats", tags=["chats"])
@@ -14,7 +14,7 @@ async def create_chat(chat: ChatFullCreate, user: CurrentActiveUserDep, uow: Asy
 
 
 @chat_router.put('/updateChat', response_model=ChatInfoRead)
-async def update_chat(chat: ChatBase, user: CurrentActiveUserDep, uow: AsyncUOWDep):
+async def update_chat(chat: ChatRead, user: CurrentActiveUserDep, uow: AsyncUOWDep):
     return await ChatService.update_chat(chat=chat, user=user, session=uow)
 
 

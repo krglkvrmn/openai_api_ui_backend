@@ -12,4 +12,3 @@ current_active_superuser = fastapi_users.current_user(
 
 CurrentActiveUserDep = Annotated[User, Depends(current_active_user)]
 CurrentActiveSuperUserDep = Annotated[User, Depends(current_active_superuser)]
-

@@ -83,6 +83,8 @@ COMPLETIONS_API_STREAM_DEBUG_RESPONSE = [
 # Users
 GUEST_ACCOUNT_LIVE_TIME = datetime.timedelta(minutes=1)
 
+APP_HOST = os.getenv("APP_HOST", default='localhost')
+APP_PORT = os.getenv("APP_PORT", default=8000)
 
 # Postgres access
 PG_DB = os.getenv("PG_DB")
@@ -91,6 +93,10 @@ PG_USER = os.getenv("PG_USER")
 PG_PASSWORD = os.getenv("PG_PASSWORD")
 PG_ENGINE = os.getenv("PG_ENGINE")
 SQL_DATABASE_URL = f'postgresql+{PG_ENGINE}://{PG_USER}:{PG_PASSWORD}@{PG_HOST}/{PG_DB}'
+
+# Redis
+REDIS_HOST = os.getenv("REDIS_HOST")
+REDIS_PORT = os.getenv("REDIS_PORT")
 
 # External APIs
 KEY_ENCODE_SECRET_KEY = os.getenv("KEY_ENCODE_SECRET_KEY")

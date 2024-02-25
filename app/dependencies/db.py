@@ -14,7 +14,7 @@ async def get_uow() -> AsyncSession:
 
 
 def get_redis() -> redis.Redis:
-    r = redis.Redis(host='localhost')
+    r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT)
     try:
         yield r
     finally:
