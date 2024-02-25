@@ -4,6 +4,7 @@ import redis
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import REDIS_HOST, REDIS_PORT
 from app.db.session import AsyncDBSession
 from app.utils.uow import AsyncUOW
 
