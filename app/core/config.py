@@ -5,11 +5,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 APP_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = APP_ROOT.parent
 
 load_dotenv(APP_ROOT / ".env")
-load_dotenv(APP_ROOT / ".secret" / "access_token_secret_key.env")
-load_dotenv(APP_ROOT / ".secret" / "refresh_token_secret_key.env")
-load_dotenv(APP_ROOT / ".secret" / "key_encode_secret_key.env")
 
 COMPLETIONS_API_DEBUG_RESPONSE = {
     "id": "chatcmpl-123",
@@ -87,27 +85,27 @@ APP_HOST = os.getenv("APP_HOST", default='localhost')
 APP_PORT = os.getenv("APP_PORT", default=8000)
 
 # Postgres access
-PG_DB = os.getenv("PG_DB")
-PG_HOST = os.getenv("PG_HOST")
-PG_USER = os.getenv("PG_USER")
-PG_PASSWORD = os.getenv("PG_PASSWORD")
-PG_ENGINE = os.getenv("PG_ENGINE")
-SQL_DATABASE_URL = f'postgresql+{PG_ENGINE}://{PG_USER}:{PG_PASSWORD}@{PG_HOST}/{PG_DB}'
+POSTGRES_DB = os.getenv("POSTGRES_DB")
+POSTGRES_HOST = os.getenv("POSTGRES_HOST")
+POSTGRES_USER = os.getenv("POSTGRES_USER")
+POSTGRES_PASSWORD = Path(os.getenv("POSTGRES_PASSWORD_FILE")).read_text()
+POSTGRES_ENGINE = os.getenv("POSTGRES_ENGINE")
+DATABASE_URL = f'postgresql+{POSTGRES_ENGINE}://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/{POSTGRES_DB}'
 
 # Redis
 REDIS_HOST = os.getenv("REDIS_HOST")
 REDIS_PORT = os.getenv("REDIS_PORT")
 
 # External APIs
-KEY_ENCODE_SECRET_KEY = os.getenv("KEY_ENCODE_SECRET_KEY")
+KEY_ENCODE_SECRET_KEY = Path(os.getenv("KEY_ENCODE_SECRET_KEY_FILE")).read_text()
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 OPENAI_API_ENDPOINTS = {
     "completions": {"method": "POST", "url": "https://api.openai.com/v1/chat/completions"}
 }
 
 # Auth tokens
-ACCESS_TOKEN_SECRET_KEY = os.getenv("ACCESS_TOKEN_SECRET_KEY")
-REFRESH_TOKEN_SECRET_KEY = os.getenv("REFRESH_TOKEN_SECRET_KEY")
+ACCESS_TOKEN_SECRET_KEY = Path(os.getenv("ACCESS_TOKEN_SECRET_KEY_FILE")).read_text()
+REFRESH_TOKEN_SECRET_KEY = Path(os.getenv("REFRESH_TOKEN_SECRET_KEY_FILE")).read_text()
 
 ACCESS_TOKEN_LIFETIME = int(os.getenv("ACCESS_TOKEN_LIFETIME"))
 REFRESH_TOKEN_LIFETIME = int(os.getenv("REFRESH_TOKEN_LIFETIME"))
