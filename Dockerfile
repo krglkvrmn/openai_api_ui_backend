@@ -24,6 +24,7 @@ USER appuser
 
 COPY . ./
 
-EXPOSE 8000
+ARG APP_PORT
+EXPOSE APP_PORT
 
-CMD bash ./run.sh
+CMD bash ./run.sh $APP_PORT
