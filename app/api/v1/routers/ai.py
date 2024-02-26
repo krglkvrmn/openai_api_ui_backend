@@ -8,7 +8,7 @@ from starlette import status
 from starlette.responses import StreamingResponse
 
 from app.core import crypto
-from app.core.config import APP_LOCAL_HOST, APP_LOCAL_PORT, APP_ORIGIN, PROTOCOL
+from app.core.config import APP_ORIGIN
 from app.dependencies.db import AsyncUOWDep, RedisDep
 from app.dependencies.users import CurrentActiveUserDep
 from app.schemas.app.sessions import SessionToken
