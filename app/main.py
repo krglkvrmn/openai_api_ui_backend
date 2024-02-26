@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from app.api.main_router import main_router
 from app.auth.routers import fastapi_users, auth_router
-from app.core.config import APP_HOST, APP_PORT
+from app.core.config import APP_LOCAL_HOST, APP_LOCAL_PORT
 from app.middleware import cors_middleware
 from app.utils.schedulers import scheduler
 
@@ -25,6 +25,6 @@ def shutdown_event():
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app, host=APP_HOST, port=APP_PORT)
+    uvicorn.run(app, host=APP_LOCAL_HOST, port=APP_LOCAL_PORT)
 
 

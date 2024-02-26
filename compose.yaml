@@ -4,7 +4,7 @@ services:
     build:
       context: .
       args:
-        APP_PORT: ${APP_PORT-8000}
+        APP_PORT: ${APP_LOCAL_PORT-8000}
     ports:
       - '8000:8000'
     secrets:

@@ -78,11 +78,24 @@ COMPLETIONS_API_STREAM_DEBUG_RESPONSE = [
     }
 ]
 
+ENV_TYPE = os.environ.get("ENV_TYPE", default="DEV")
+
+
+APP_LOCAL_HOST = os.getenv("APP_LOCAL_HOST", default='localhost')
+APP_LOCAL_PORT = os.getenv("APP_LOCAL_PORT", default=8000)
+
+APP_PUBLIC_HOST = os.getenv("APP_PUBLIC_HOST")
+APP_PUBLIC_PORT = 433
+
+if ENV_TYPE == 'PROD':
+    APP_ORIGIN = f'https://{APP_PUBLIC_HOST}:{APP_PUBLIC_PORT}'
+elif ENV_TYPE == 'DEV':
+    APP_ORIGIN = f'http://{APP_LOCAL_HOST}:{APP_LOCAL_PORT}'
+else:
+    raise ValueError(f'Invalid ENV_TYPE: {ENV_TYPE}')
+
 # Users
 GUEST_ACCOUNT_LIVE_TIME = datetime.timedelta(minutes=1)
-
-APP_HOST = os.getenv("APP_HOST", default='localhost')
-APP_PORT = os.getenv("APP_PORT", default=8000)
 
 # Postgres access
 POSTGRES_DB = os.getenv("POSTGRES_DB")

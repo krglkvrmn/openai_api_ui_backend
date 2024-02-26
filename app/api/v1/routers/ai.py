@@ -8,7 +8,7 @@ from starlette import status
 from starlette.responses import StreamingResponse
 
 from app.core import crypto
-from app.core.config import APP_HOST, APP_PORT
+from app.core.config import APP_LOCAL_HOST, APP_LOCAL_PORT, APP_ORIGIN, PROTOCOL
 from app.dependencies.db import AsyncUOWDep, RedisDep
 from app.dependencies.users import CurrentActiveUserDep
 from app.schemas.app.sessions import SessionToken
@@ -58,7 +58,7 @@ async def create_completion(
     session_token = str(uuid.uuid4())
     request_parameters = json.dumps(request_parameters)
     redis.set(session_token, value=request_parameters, ex=int(session_token_ttl.total_seconds()), nx=True)
-    response.headers['Location'] = f"http://{APP_HOST}:{APP_PORT}/api/v1/ai/streamCompletion/{session_token}"
+    response.headers['Location'] = f"{APP_ORIGIN}/api/v1/ai/streamCompletion/{session_token}"
     return {
         "token": session_token,
         "expiry_date": datetime.datetime.utcnow() + session_token_ttl
