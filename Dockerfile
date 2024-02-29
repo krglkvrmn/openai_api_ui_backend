@@ -27,4 +27,4 @@ COPY . ./
 ARG APP_PORT
 EXPOSE $APP_PORT
 
-CMD bash ./run.sh $APP_PORT
+CMD bash ./run.sh
