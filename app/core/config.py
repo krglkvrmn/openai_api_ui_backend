@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
+from pydantic.v1 import BaseSettings
 
 APP_ROOT = Path(__file__).parent.parent
 PROJECT_ROOT = APP_ROOT.parent
@@ -78,6 +79,7 @@ COMPLETIONS_API_STREAM_DEBUG_RESPONSE = [
     }
 ]
 
+
 ENV_TYPE = os.environ.get("ENV_TYPE", default="DEV")
 
 
@@ -114,6 +116,8 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 OPENAI_API_ENDPOINTS = {
     "completions": {"method": "POST", "url": "https://api.openai.com/v1/chat/completions"}
 }
+
+OPENAPI_URL = os.getenv('OPENAPI_URL', '/openapi.json')
 
 # Auth tokens
 ACCESS_TOKEN_SECRET_KEY = Path(os.getenv("ACCESS_TOKEN_SECRET_KEY_FILE")).read_text()

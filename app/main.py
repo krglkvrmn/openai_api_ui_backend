@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 
 from app.api.main_router import main_router
-from app.auth.routers import fastapi_users, auth_router
-from app.core.config import APP_LOCAL_HOST, APP_LOCAL_PORT
+from app.auth.routers import auth_router
+from app.core.config import APP_LOCAL_HOST, APP_LOCAL_PORT, OPENAPI_URL
 from app.middleware import cors_middleware
 from app.utils.schedulers import scheduler
 
-app = FastAPI()
+
+app = FastAPI(openapi_url=OPENAPI_URL)
 app.add_middleware(cors_middleware)
 
 app.include_router(main_router)
