@@ -1,3 +1,5 @@
+import uuid
+
 from pydantic import BaseModel
 
 
@@ -7,7 +9,7 @@ class SystemPromptCreate(BaseModel):
 
 class SystemPromptRead(SystemPromptCreate):
     id: int
-    user_id: int
+    user_id: uuid.UUID
     popularity: int
 
     class Config:
