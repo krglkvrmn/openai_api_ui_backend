@@ -47,6 +47,8 @@ async def create_completion(
             api_token = request_api_token
         else:
             api_tokens = await ProfileService.get_api_tokens(user=user, session=uow, trim=False)
+            if not api_tokens:
+                raise HTTPException(status_code=400, detail="API key missing")
             api_token = api_tokens[0].key
 
         request_parameters |= {
