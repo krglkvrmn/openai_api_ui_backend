@@ -5,7 +5,7 @@ from app.auth.auth import (
     github_oauth_client, google_oauth_client
 )
 from app.auth.schemas import UserCreate, UserReadShort, UserUpdate
-from app.core.config import GITHUB_OAUTH2_CLIENT_SECRET, GOOGLE_OAUTH2_CLIENT_SECRET
+from app.core.config import APP_ORIGIN, GITHUB_OAUTH2_CLIENT_SECRET, GOOGLE_OAUTH2_CLIENT_SECRET
 from app.dependencies.users import CurrentActiveUserDep
 
 auth_router = APIRouter(prefix='')
@@ -22,12 +22,22 @@ auth_router.include_router(
     tags=["auth"]
 )
 auth_router.include_router(
-    fastapi_users.get_oauth_router(google_oauth_client, at_rt_auth_oidc_backend, GOOGLE_OAUTH2_CLIENT_SECRET),
+    fastapi_users.get_oauth_router(
+        google_oauth_client,
+        at_rt_auth_oidc_backend,
+        GOOGLE_OAUTH2_CLIENT_SECRET,
+        redirect_url=APP_ORIGIN + '/auth/google/callback'
+    ),
     prefix="/auth/google",
     tags=["auth"]
 )
 auth_router.include_router(
-    fastapi_users.get_oauth_router(github_oauth_client, at_rt_auth_oidc_backend, GITHUB_OAUTH2_CLIENT_SECRET),
+    fastapi_users.get_oauth_router(
+        github_oauth_client,
+        at_rt_auth_oidc_backend,
+        GITHUB_OAUTH2_CLIENT_SECRET,
+        redirect_url=APP_ORIGIN + '/auth/github/callback'
+    ),
     prefix="/auth/github",
     tags=["auth"]
 )
