@@ -12,6 +12,8 @@ services:
       - access_token_secret_key
       - refresh_token_secret_key
       - db_password
+      - google_oauth2_config
+      - github_oauth2_config
     env_file:
       - ${ENV_FILE-app/.env}
     environment:
@@ -21,6 +23,8 @@ services:
       - REFRESH_TOKEN_SECRET_KEY_FILE=/run/secrets/refresh_token_secret_key
       - KEY_ENCODE_SECRET_KEY_FILE=/run/secrets/key_encode_secret_key
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+      - GOOGLE_OAUTH2_CONFIG_FILE=/run/secrets/google_oauth2.json
+      - GITHUB_OAUTH2_CONFIG_FILE=/run/secrets/github_oauth2.json
     depends_on:
       - postgres_db
       - redis
@@ -68,3 +72,7 @@ secrets:
     file: ${REFRESH_TOKEN_SECRET_KEY_FILE}
   key_encode_secret_key:
     file: ${KEY_ENCODE_SECRET_KEY_FILE}
+  google_oauth2_config:
+    file: ${GOOGLE_OAUTH2_CONFIG_FILE}
+  github_oauth2_config:
+    file: ${GITHUB_OAUTH2_CONFIG_FILE}
