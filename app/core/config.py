@@ -5,6 +5,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 from pydantic.v1 import BaseSettings
 
+from app.utils.io import read_oauth2_config_file
+
 APP_ROOT = Path(__file__).parent.parent
 PROJECT_ROOT = APP_ROOT.parent
 
@@ -128,3 +130,9 @@ REFRESH_TOKEN_LIFETIME = int(os.getenv("REFRESH_TOKEN_LIFETIME"))
 
 ACCESS_TOKEN_COOKIE_LIFETIME = int(os.getenv("ACCESS_TOKEN_COOKIE_LIFETIME"))
 REFRESH_TOKEN_COOKIE_LIFETIME = int(os.getenv("REFRESH_TOKEN_COOKIE_LIFETIME"))
+
+# OAuth2 configs
+GOOGLE_OAUTH2_CONFIG_FILE = os.getenv("GOOGLE_OAUTH2_CONFIG_FILE")
+GITHUB_OAUTH2_CONFIG_FILE = os.getenv("GITHUB_OAUTH2_CONFIG_FILE")
+GOOGLE_OAUTH2_CLIENT_ID, GOOGLE_OAUTH2_CLIENT_SECRET = read_oauth2_config_file(GOOGLE_OAUTH2_CONFIG_FILE)
+GITHUB_OAUTH2_CLIENT_ID, GITHUB_OAUTH2_CLIENT_SECRET = read_oauth2_config_file(GITHUB_OAUTH2_CONFIG_FILE)

@@ -6,6 +6,7 @@ from fastapi_users.authentication import CookieTransport
 from fastapi_users.authentication.strategy import StrategyDestroyNotSupportedError
 from fastapi_users.authentication.transport import TransportLogoutNotSupportedError
 from fastapi_users.types import DependencyCallable
+from starlette.responses import RedirectResponse
 
 
 @dataclass
@@ -41,13 +42,18 @@ class AccessRefreshTokensCookieTransport(CookieTransport):
     def __init__(
             self,
             access_token_cookie_transport: CookieTransport,
-            refresh_token_cookie_transport: CookieTransport
+            refresh_token_cookie_transport: CookieTransport,
+            redirect_url: str = None
     ):
         self.access_token_cookie_transport = access_token_cookie_transport
         self.refresh_token_cookie_transport = refresh_token_cookie_transport
+        self.redirect_uri = redirect_url
 
     async def get_login_response(self, tokens: TokenPair) -> Response:
-        response = Response(status_code=status.HTTP_204_NO_CONTENT)
+        if self.redirect_uri is not None:
+            response = RedirectResponse(url=self.redirect_uri)
+        else:
+            response = Response(status_code=status.HTTP_204_NO_CONTENT)
         response = self.access_token_cookie_transport._set_login_cookie(response, tokens.access_token)
         return self.refresh_token_cookie_transport._set_login_cookie(response, tokens.refresh_token)
 
