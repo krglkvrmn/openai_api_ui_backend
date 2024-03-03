@@ -11,7 +11,7 @@ from app.auth.database import User, get_user_db
 from app.core.config import (
     ACCESS_TOKEN_COOKIE_LIFETIME, ACCESS_TOKEN_LIFETIME, ACCESS_TOKEN_SECRET_KEY,
     ENV_TYPE, GITHUB_OAUTH2_CLIENT_ID, GITHUB_OAUTH2_CLIENT_SECRET, GOOGLE_OAUTH2_CLIENT_ID,
-    GOOGLE_OAUTH2_CLIENT_SECRET, REFRESH_TOKEN_COOKIE_LIFETIME,
+    GOOGLE_OAUTH2_CLIENT_SECRET, MAIN_PAGE_URL, REFRESH_TOKEN_COOKIE_LIFETIME,
     REFRESH_TOKEN_LIFETIME, REFRESH_TOKEN_SECRET_KEY
 )
 from app.patches.auth import (
@@ -52,7 +52,7 @@ access_refresh_token_default_cookie_transport = AccessRefreshTokensCookieTranspo
 access_refresh_token_redirect_cookie_transport = AccessRefreshTokensCookieTransport(
     access_token_cookie_transport=access_token_cookie_transport,
     refresh_token_cookie_transport=refresh_token_cookie_transport,
-    redirect_url='http://localhost:3001/'
+    redirect_url=MAIN_PAGE_URL
 )
 
 

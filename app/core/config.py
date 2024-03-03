@@ -90,12 +90,15 @@ APP_LOCAL_PORT = os.getenv("APP_LOCAL_PORT", default=8000)
 
 APP_PUBLIC_HOST = os.getenv("APP_PUBLIC_HOST")
 
+
 if ENV_TYPE == 'PROD':
     APP_ORIGIN = f'https://{APP_PUBLIC_HOST}'
 elif ENV_TYPE == 'DEV':
     APP_ORIGIN = f'http://{APP_LOCAL_HOST}:{APP_LOCAL_PORT}'
 else:
     raise ValueError(f'Invalid ENV_TYPE: {ENV_TYPE}')
+
+MAIN_PAGE_URL = APP_ORIGIN if ENV_TYPE == "PROD" else "http://localhost:3001"
 
 # Users
 GUEST_ACCOUNT_LIVE_TIME = datetime.timedelta(minutes=1)
