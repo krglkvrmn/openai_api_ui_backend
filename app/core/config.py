@@ -3,7 +3,6 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-from pydantic.v1 import BaseSettings
 
 from app.utils.io import read_oauth2_config_file
 

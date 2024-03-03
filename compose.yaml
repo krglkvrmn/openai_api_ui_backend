@@ -23,8 +23,8 @@ services:
       - REFRESH_TOKEN_SECRET_KEY_FILE=/run/secrets/refresh_token_secret_key
       - KEY_ENCODE_SECRET_KEY_FILE=/run/secrets/key_encode_secret_key
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
-      - GOOGLE_OAUTH2_CONFIG_FILE=/run/secrets/google_oauth
-      - GITHUB_OAUTH2_CONFIG_FILE=/run/secrets/github_oauth
+      - GOOGLE_OAUTH2_CONFIG_FILE=/run/secrets/google_oauth2_config
+      - GITHUB_OAUTH2_CONFIG_FILE=/run/secrets/github_oauth2_config
     depends_on:
       - postgres_db
       - redis
