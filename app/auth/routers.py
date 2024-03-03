@@ -26,7 +26,8 @@ auth_router.include_router(
         google_oauth_client,
         at_rt_auth_oidc_backend,
         GOOGLE_OAUTH2_CLIENT_SECRET,
-        redirect_url=APP_ORIGIN + '/auth/google/callback'
+        redirect_url=APP_ORIGIN + '/auth/google/callback',
+        associate_by_email=True
     ),
     prefix="/auth/google",
     tags=["auth"]
@@ -36,7 +37,8 @@ auth_router.include_router(
         github_oauth_client,
         at_rt_auth_oidc_backend,
         GITHUB_OAUTH2_CLIENT_SECRET,
-        redirect_url=APP_ORIGIN + '/auth/github/callback'
+        redirect_url=APP_ORIGIN + '/auth/github/callback',
+        associate_by_email=True
     ),
     prefix="/auth/github",
     tags=["auth"]

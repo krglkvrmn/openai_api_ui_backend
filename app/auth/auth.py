@@ -105,7 +105,7 @@ google_oauth_client = OpenID(
 )
 github_oauth_client = GitHubOAuth2(
     client_id=GITHUB_OAUTH2_CLIENT_ID,
-    client_secret=GITHUB_OAUTH2_CLIENT_SECRET,
+    client_secret=GITHUB_OAUTH2_CLIENT_SECRET
 )
 
 
