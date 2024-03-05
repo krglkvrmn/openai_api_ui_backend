@@ -100,7 +100,10 @@ else:
 MAIN_PAGE_URL = APP_ORIGIN if ENV_TYPE == "PROD" else "http://localhost:3001"
 
 # Users
-GUEST_ACCOUNT_LIVE_TIME = datetime.timedelta(minutes=10)
+GUEST_ACCOUNT_LIFETIME = int(os.getenv('GUEST_ACCOUNT_LIFETIME'))
+GUEST_ACCOUNT_LIFETIME = datetime.timedelta(seconds=GUEST_ACCOUNT_LIFETIME)
+UNVERIFIED_ACCOUNT_LIFETIME = int(os.getenv('UNVERIFIED_ACCOUNT_LIFETIME'))
+UNVERIFIED_ACCOUNT_LIFETIME = datetime.timedelta(seconds=UNVERIFIED_ACCOUNT_LIFETIME)
 
 # Postgres access
 POSTGRES_DB = os.getenv("POSTGRES_DB")

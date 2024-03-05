@@ -29,14 +29,15 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     ):
         print(f"Verification requested for user {user.id}. Verification token: {token}")
         verifiication_link = MAIN_PAGE_URL + '/verification?' + urlencode({'vt': token})
-        message = Mail(
-            from_email='verification@chat.krglkvrmn.me',
-            to_emails=user.email,
-            subject='Verify Your Email Address',
-            html_content=f'Please verify your email by following this link: <a href={verifiication_link}>Verify</b>'
-        )
-        sg = SendGridAPIClient(SENDGRID_API_KEY)
-        sg.send(message)
+        print(verifiication_link)
+        # message = Mail(
+        #     from_email='verification@chat.krglkvrmn.me',
+        #     to_emails=user.email,
+        #     subject='Verify Your Email Address',
+        #     html_content=f'Please verify your email by following this link: <a href={verifiication_link}>Verify</b>'
+        # )
+        # sg = SendGridAPIClient(SENDGRID_API_KEY)
+        # sg.send(message)
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):
