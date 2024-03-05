@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Any, Dict
 
 from fastapi import Response, status
 from fastapi_users import models
@@ -6,6 +7,7 @@ from fastapi_users.authentication import CookieTransport
 from fastapi_users.authentication.strategy import StrategyDestroyNotSupportedError
 from fastapi_users.authentication.transport import TransportLogoutNotSupportedError
 from fastapi_users.types import DependencyCallable
+from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from starlette.responses import RedirectResponse
 
 
@@ -93,4 +95,11 @@ class AccessRefreshAuthenticationBackend:
             response = Response(status_code=status.HTTP_204_NO_CONTENT)
 
         return response
+
+
+class SQLAlchemyCustomUserDatabase(SQLAlchemyUserDatabase):
+    async def create(self, create_dict: Dict[str, Any]) -> models.UP:
+        create_dict['is_verified'] = create_dict.get('is_guest') or create_dict.get('is_verified', False)
+        return await super().create(create_dict)
+
 

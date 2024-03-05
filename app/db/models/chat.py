@@ -18,7 +18,7 @@ class Chat(Base):
     model: Mapped[str] = mapped_column(String(30), nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), default=datetime.datetime.utcnow)
     last_updated: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), default=datetime.datetime.utcnow)
-    user_id: Mapped[uuid.UUID] = mapped_column(UUID, ForeignKey('user.id'), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID, ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
 
     messages: Mapped[list["Message"]] = relationship(
         back_populates="chat", cascade='all, delete-orphan', order_by=Message.created_at

@@ -1,5 +1,4 @@
 import datetime
-import datetime
 import json
 import uuid
 
@@ -10,7 +9,7 @@ from starlette.responses import StreamingResponse
 from app.core import crypto
 from app.core.config import APP_ORIGIN
 from app.dependencies.db import AsyncUOWDep, RedisDep
-from app.dependencies.users import CurrentActiveUserDep
+from app.dependencies.users import CurrentActiveVerifiedUserDep
 from app.schemas.app.sessions import SessionToken
 from app.schemas.openai.completions import ChatCompletionsRequest
 from app.services.ai_service import AIService
@@ -30,7 +29,7 @@ async def create_completion(
         request: Request,
         response: Response,
         uow: AsyncUOWDep,
-        user: CurrentActiveUserDep,
+        user: CurrentActiveVerifiedUserDep,
         redis: RedisDep,
         request_params: ChatCompletionsRequest,
         debug: bool = False
@@ -68,7 +67,7 @@ async def create_completion(
 
 
 @ai_router.get('/streamCompletion/{session_token}')
-def stream_completion(session_token: uuid.UUID, redis: RedisDep, user: CurrentActiveUserDep):
+def stream_completion(session_token: uuid.UUID, redis: RedisDep, user: CurrentActiveVerifiedUserDep):
     request_parameters = redis.get(str(session_token))
     if request_parameters is None:
         raise HTTPException(status_code=410, detail="Session token for receiving a completion expired")

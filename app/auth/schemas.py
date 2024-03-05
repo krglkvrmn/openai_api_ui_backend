@@ -14,6 +14,7 @@ class UserRead(schemas.BaseUser[uuid.UUID]):
 class UserReadShort(BaseModel):
     email: EmailStr
     is_guest: bool = False
+    is_verified: bool = False
 
     class Config:
         from_attributes = True

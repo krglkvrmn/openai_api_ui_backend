@@ -16,7 +16,7 @@ class Message(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     author: Mapped[Enum] = mapped_column(Enum(Author), nullable=False)
     content: Mapped[str] = mapped_column(Text, nullable=False)
-    chat_id: Mapped[int] = mapped_column(Integer, ForeignKey('chats.id'), nullable=False)
+    chat_id: Mapped[int] = mapped_column(Integer, ForeignKey('chats.id', ondelete='CASCADE'), nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), default=datetime.datetime.utcnow)
 
     chat: Mapped["Chat"] = relationship(back_populates="messages")
