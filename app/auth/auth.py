@@ -14,11 +14,17 @@ from app.patches.auth import (
 
 
 def get_at_jwt_strategy() -> JWTStrategy:
-    return JWTStrategy(secret=settings.ACCESS_TOKEN_SECRET, lifetime_seconds=settings.ACCESS_TOKEN_LIFETIME)
+    return JWTStrategy(
+        secret=settings.ACCESS_TOKEN_SECRET.get_secret_value(),
+        lifetime_seconds=settings.ACCESS_TOKEN_LIFETIME
+    )
 
 
 def get_rt_jwt_strategy() -> JWTStrategy:
-    return JWTStrategy(secret=settings.REFRESH_TOKEN_SECRET, lifetime_seconds=settings.REFRESH_TOKEN_LIFETIME)
+    return JWTStrategy(
+        secret=settings.REFRESH_TOKEN_SECRET.get_secret_value(),
+        lifetime_seconds=settings.REFRESH_TOKEN_LIFETIME
+    )
 
 
 def get_at_rt_jwt_strategy() -> JWTWithRefreshStrategyWriteOnly:

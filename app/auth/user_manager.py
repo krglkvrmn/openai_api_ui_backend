@@ -13,7 +13,7 @@ from app.core.settings import settings
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     # reset_password_token_secret = ACCESS_TOKEN_SECRET_KEY
-    verification_token_secret = settings.VERIFICATION_TOKEN_SECRET
+    verification_token_secret = settings.VERIFICATION_TOKEN_SECRET.get_secret_value()
     verification_token_lifetime_seconds = settings.VERIFICATION_TOKEN_LIFETIME
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
@@ -36,7 +36,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         #     subject='Verify Your Email Address',
         #     html_content=f'Please verify your email by following this link: <a href={verifiication_link}>Verify</b>'
         # )
-        # sg = SendGridAPIClient(SENDGRID_API_KEY)
+        # sg = SendGridAPIClient(settings.SENDGRID_API_KEY.get_secret_value())
         # sg.send(message)
 
 

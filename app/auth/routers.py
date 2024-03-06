@@ -25,7 +25,7 @@ auth_router.include_router(
     fastapi_users.get_oauth_router(
         google_oauth_client,
         at_rt_auth_oidc_backend,
-        settings.GOOGLE_OAUTH_CONFIG.CLIENT_SECRET,
+        settings.GOOGLE_OAUTH_CONFIG.CLIENT_SECRET.get_secret_value(),
         redirect_url=settings.APP_ORIGIN.unicode_string() + 'auth/google/callback',
         associate_by_email=True,
         is_verified_by_default=True
@@ -37,7 +37,7 @@ auth_router.include_router(
     fastapi_users.get_oauth_router(
         github_oauth_client,
         at_rt_auth_oidc_backend,
-        settings.GITHUB_OAUTH_CONFIG.CLIENT_SECRET,
+        settings.GITHUB_OAUTH_CONFIG.CLIENT_SECRET.get_secret_value(),
         redirect_url=settings.APP_ORIGIN.unicode_string() + 'auth/github/callback',
         associate_by_email=True,
         is_verified_by_default=True
