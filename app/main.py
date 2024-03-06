@@ -2,12 +2,12 @@ from fastapi import FastAPI
 
 from app.api.main_router import main_router
 from app.auth.routers import auth_router
-from app.core.config import APP_LOCAL_HOST, APP_LOCAL_PORT, OPENAPI_URL
+from app.core.settings import settings
 from app.middleware import cors_middleware
 from app.utils.schedulers import guests_deleter_scheduler, unverified_deleter_scheduler
 
 
-app = FastAPI(openapi_url=OPENAPI_URL)
+app = FastAPI(openapi_url=settings.OPENAPI_URL)
 app.add_middleware(cors_middleware)
 
 app.include_router(main_router)
@@ -28,6 +28,6 @@ def shutdown_event():
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app, host=APP_LOCAL_HOST, port=APP_LOCAL_PORT)
+    uvicorn.run(app, host=settings.APP_LOCAL_HOST, port=settings.APP_LOCAL_PORT)
 
 

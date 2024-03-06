@@ -4,7 +4,7 @@ import redis
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.config import REDIS_HOST, REDIS_PORT
+from app.core.settings import settings
 from app.db.session import AsyncDBSession
 from app.utils.uow import AsyncUOW
 
@@ -15,7 +15,7 @@ async def get_uow() -> AsyncSession:
 
 
 def get_redis() -> redis.Redis:
-    r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT)
+    r = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
     try:
         yield r
     finally:

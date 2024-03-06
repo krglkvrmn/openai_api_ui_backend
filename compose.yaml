@@ -22,7 +22,7 @@ services:
       - ACCESS_TOKEN_SECRET_KEY_FILE=/run/secrets/access_token_secret_key
       - REFRESH_TOKEN_SECRET_KEY_FILE=/run/secrets/refresh_token_secret_key
       - KEY_ENCODE_SECRET_KEY_FILE=/run/secrets/key_encode_secret_key
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
       - GOOGLE_OAUTH2_CONFIG_FILE=/run/secrets/google_oauth2_config
       - GITHUB_OAUTH2_CONFIG_FILE=/run/secrets/github_oauth2_config
     depends_on:
@@ -48,7 +48,7 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
     expose:
       - 5432
     ports:

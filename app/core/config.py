@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-
+from app.core.settings import settings
 from app.utils.io import read_oauth2_config_file
 
 APP_ROOT = Path(__file__).parent.parent
@@ -80,68 +80,68 @@ COMPLETIONS_API_STREAM_DEBUG_RESPONSE = [
     }
 ]
 
-
-ENV_TYPE = os.environ.get("ENV_TYPE", default="DEV")
-
-
-APP_LOCAL_HOST = os.getenv("APP_LOCAL_HOST", default='localhost')
-APP_LOCAL_PORT = os.getenv("APP_LOCAL_PORT", default=8000)
-
-APP_PUBLIC_HOST = os.getenv("APP_PUBLIC_HOST")
-
-
-if ENV_TYPE == 'PROD':
-    APP_ORIGIN = f'https://{APP_PUBLIC_HOST}'
-elif ENV_TYPE == 'DEV':
-    APP_ORIGIN = f'http://{APP_LOCAL_HOST}:{APP_LOCAL_PORT}'
-else:
-    raise ValueError(f'Invalid ENV_TYPE: {ENV_TYPE}')
-
-MAIN_PAGE_URL = APP_ORIGIN if ENV_TYPE == "PROD" else "http://localhost:3001"
-
-# Users
-GUEST_ACCOUNT_LIFETIME = int(os.getenv('GUEST_ACCOUNT_LIFETIME'))
-GUEST_ACCOUNT_LIFETIME = datetime.timedelta(seconds=GUEST_ACCOUNT_LIFETIME)
-UNVERIFIED_ACCOUNT_LIFETIME = int(os.getenv('UNVERIFIED_ACCOUNT_LIFETIME'))
-UNVERIFIED_ACCOUNT_LIFETIME = datetime.timedelta(seconds=UNVERIFIED_ACCOUNT_LIFETIME)
-
-# Postgres access
-POSTGRES_DB = os.getenv("POSTGRES_DB")
-POSTGRES_HOST = os.getenv("POSTGRES_HOST")
-POSTGRES_USER = os.getenv("POSTGRES_USER")
-POSTGRES_PASSWORD = Path(os.getenv("POSTGRES_PASSWORD_FILE")).read_text()
-POSTGRES_ENGINE = os.getenv("POSTGRES_ENGINE")
-DATABASE_URL = f'postgresql+{POSTGRES_ENGINE}://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/{POSTGRES_DB}'
-
-# Redis
-REDIS_HOST = os.getenv("REDIS_HOST")
-REDIS_PORT = os.getenv("REDIS_PORT")
-
-# External APIs
-KEY_ENCODE_SECRET_KEY = Path(os.getenv("KEY_ENCODE_SECRET_KEY_FILE")).read_text()
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-OPENAI_API_ENDPOINTS = {
-    "completions": {"method": "POST", "url": "https://api.openai.com/v1/chat/completions"}
-}
-
-OPENAPI_URL = os.getenv('OPENAPI_URL', '/openapi.json')
-
-# Auth tokens
-ACCESS_TOKEN_SECRET_KEY = Path(os.getenv("ACCESS_TOKEN_SECRET_KEY_FILE")).read_text()
-REFRESH_TOKEN_SECRET_KEY = Path(os.getenv("REFRESH_TOKEN_SECRET_KEY_FILE")).read_text()
-VERIFICATION_TOKEN_SECRET_KEY = Path(os.getenv("VERIFICATION_TOKEN_SECRET_KEY_FILE")).read_text()
-
-ACCESS_TOKEN_LIFETIME = int(os.getenv("ACCESS_TOKEN_LIFETIME"))
-REFRESH_TOKEN_LIFETIME = int(os.getenv("REFRESH_TOKEN_LIFETIME"))
-VERIFICATION_TOKEN_LIFETIME = int(os.getenv("VERIFICATION_TOKEN_LIFETIME"))
-
-ACCESS_TOKEN_COOKIE_LIFETIME = int(os.getenv("ACCESS_TOKEN_COOKIE_LIFETIME"))
-REFRESH_TOKEN_COOKIE_LIFETIME = int(os.getenv("REFRESH_TOKEN_COOKIE_LIFETIME"))
-
-# OAuth2 configs
-GOOGLE_OAUTH2_CONFIG_FILE = os.getenv("GOOGLE_OAUTH2_CONFIG_FILE")
-GITHUB_OAUTH2_CONFIG_FILE = os.getenv("GITHUB_OAUTH2_CONFIG_FILE")
-GOOGLE_OAUTH2_CLIENT_ID, GOOGLE_OAUTH2_CLIENT_SECRET = read_oauth2_config_file(GOOGLE_OAUTH2_CONFIG_FILE)
-GITHUB_OAUTH2_CLIENT_ID, GITHUB_OAUTH2_CLIENT_SECRET = read_oauth2_config_file(GITHUB_OAUTH2_CONFIG_FILE)
-
-SENDGRID_API_KEY = Path(os.getenv("SENDGRID_API_KEY_FILE")).read_text()
+#
+# ENV_TYPE = os.environ.get("ENV_TYPE", default="DEV")
+#
+#
+# APP_LOCAL_HOST = os.getenv("APP_LOCAL_HOST", default='localhost')
+# APP_LOCAL_PORT = os.getenv("APP_LOCAL_PORT", default=8000)
+#
+# APP_PUBLIC_HOST = os.getenv("APP_PUBLIC_HOST")
+#
+#
+# if ENV_TYPE == 'PROD':
+#     APP_ORIGIN = f'https://{APP_PUBLIC_HOST}'
+# elif ENV_TYPE == 'DEV':
+#     APP_ORIGIN = f'http://{APP_LOCAL_HOST}:{APP_LOCAL_PORT}'
+# else:
+#     raise ValueError(f'Invalid ENV_TYPE: {ENV_TYPE}')
+#
+# MAIN_PAGE_URL = APP_ORIGIN if ENV_TYPE == "PROD" else "http://localhost:3001"
+#
+# # Users
+# GUEST_ACCOUNT_LIFETIME = int(os.getenv('GUEST_ACCOUNT_LIFETIME'))
+# GUEST_ACCOUNT_LIFETIME = datetime.timedelta(seconds=GUEST_ACCOUNT_LIFETIME)
+# UNVERIFIED_ACCOUNT_LIFETIME = int(os.getenv('UNVERIFIED_ACCOUNT_LIFETIME'))
+# UNVERIFIED_ACCOUNT_LIFETIME = datetime.timedelta(seconds=UNVERIFIED_ACCOUNT_LIFETIME)
+#
+# # Postgres access
+# POSTGRES_DB = os.getenv("POSTGRES_DB")
+# POSTGRES_HOST = os.getenv("POSTGRES_HOST")
+# POSTGRES_USER = os.getenv("POSTGRES_USER")
+# POSTGRES_PASSWORD = Path(os.getenv("POSTGRES_PASSWORD_FILE")).read_text()
+# POSTGRES_ENGINE = os.getenv("POSTGRES_ENGINE")
+# DATABASE_URL = f'postgresql+{POSTGRES_ENGINE}://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/{POSTGRES_DB}'
+#
+# # Redis
+# REDIS_HOST = os.getenv("REDIS_HOST")
+# REDIS_PORT = os.getenv("REDIS_PORT")
+#
+# # External APIs
+# KEY_ENCODE_SECRET_KEY = Path(os.getenv("KEY_ENCODE_SECRET_KEY_FILE")).read_text()
+# OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+# OPENAI_API_ENDPOINTS = {
+#     "completions": {"method": "POST", "url": "https://api.openai.com/v1/chat/completions"}
+# }
+#
+# OPENAPI_URL = os.getenv('OPENAPI_URL', '/openapi.json')
+#
+# # Auth tokens
+# ACCESS_TOKEN_SECRET_KEY = Path(os.getenv("ACCESS_TOKEN_SECRET_KEY_FILE")).read_text()
+# REFRESH_TOKEN_SECRET_KEY = Path(os.getenv("REFRESH_TOKEN_SECRET_KEY_FILE")).read_text()
+# VERIFICATION_TOKEN_SECRET_KEY = Path(os.getenv("VERIFICATION_TOKEN_SECRET_KEY_FILE")).read_text()
+#
+# ACCESS_TOKEN_LIFETIME = int(os.getenv("ACCESS_TOKEN_LIFETIME"))
+# REFRESH_TOKEN_LIFETIME = int(os.getenv("REFRESH_TOKEN_LIFETIME"))
+# VERIFICATION_TOKEN_LIFETIME = int(os.getenv("VERIFICATION_TOKEN_LIFETIME"))
+#
+# ACCESS_TOKEN_COOKIE_LIFETIME = int(os.getenv("ACCESS_TOKEN_COOKIE_LIFETIME"))
+# REFRESH_TOKEN_COOKIE_LIFETIME = int(os.getenv("REFRESH_TOKEN_COOKIE_LIFETIME"))
+#
+# # OAuth2 configs
+# GOOGLE_OAUTH2_CONFIG_FILE = os.getenv("GOOGLE_OAUTH2_CONFIG_FILE")
+# GITHUB_OAUTH2_CONFIG_FILE = os.getenv("GITHUB_OAUTH2_CONFIG_FILE")
+# GOOGLE_OAUTH2_CLIENT_ID, GOOGLE_OAUTH2_CLIENT_SECRET = read_oauth2_config_file(GOOGLE_OAUTH2_CONFIG_FILE)
+# GITHUB_OAUTH2_CLIENT_ID, GITHUB_OAUTH2_CLIENT_SECRET = read_oauth2_config_file(GITHUB_OAUTH2_CONFIG_FILE)
+#
+# SENDGRID_API_KEY = Path(os.getenv("SENDGRID_API_KEY_FILE")).read_text()

@@ -1,8 +1,8 @@
 from cryptography.fernet import Fernet
 
-from app.core.config import KEY_ENCODE_SECRET_KEY
+from app.core.settings import settings
 
-cipher_suite = Fernet(KEY_ENCODE_SECRET_KEY)
+cipher_suite = Fernet(settings.KEY_ENCODE_SECRET.get_secret_value())
 
 
 def encrypt(value: str) -> bytes:

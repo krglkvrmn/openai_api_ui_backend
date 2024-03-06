@@ -6,11 +6,7 @@ from fastapi_users.authentication import AuthenticationBackend, CookieTransport,
 
 from app.auth.database import User
 from app.auth.user_manager import get_user_manager
-from app.core.config import (
-    ACCESS_TOKEN_COOKIE_LIFETIME, ACCESS_TOKEN_LIFETIME, ACCESS_TOKEN_SECRET_KEY,
-    ENV_TYPE, MAIN_PAGE_URL, REFRESH_TOKEN_COOKIE_LIFETIME,
-    REFRESH_TOKEN_LIFETIME, REFRESH_TOKEN_SECRET_KEY
-)
+from app.core.settings import settings
 from app.patches.auth import (
     AccessRefreshAuthenticationBackend, AccessRefreshTokensCookieTransport,
     JWTWithRefreshStrategyWriteOnly
@@ -18,11 +14,11 @@ from app.patches.auth import (
 
 
 def get_at_jwt_strategy() -> JWTStrategy:
-    return JWTStrategy(secret=ACCESS_TOKEN_SECRET_KEY, lifetime_seconds=ACCESS_TOKEN_LIFETIME)
+    return JWTStrategy(secret=settings.ACCESS_TOKEN_SECRET, lifetime_seconds=settings.ACCESS_TOKEN_LIFETIME)
 
 
 def get_rt_jwt_strategy() -> JWTStrategy:
-    return JWTStrategy(secret=REFRESH_TOKEN_SECRET_KEY, lifetime_seconds=REFRESH_TOKEN_LIFETIME)
+    return JWTStrategy(secret=settings.REFRESH_TOKEN_SECRET, lifetime_seconds=settings.REFRESH_TOKEN_LIFETIME)
 
 
 def get_at_rt_jwt_strategy() -> JWTWithRefreshStrategyWriteOnly:
@@ -34,13 +30,13 @@ def get_at_rt_jwt_strategy() -> JWTWithRefreshStrategyWriteOnly:
 
 access_token_cookie_transport = CookieTransport(
     cookie_name="__at",
-    cookie_max_age=ACCESS_TOKEN_COOKIE_LIFETIME,
-    cookie_secure=ENV_TYPE == "PROD"
+    cookie_max_age=settings.ACCESS_TOKEN_COOKIE_LIFETIME,
+    cookie_secure=settings.ENV_TYPE == "PROD"
 )
 refresh_token_cookie_transport = CookieTransport(
     cookie_name="__rt",
-    cookie_max_age=REFRESH_TOKEN_COOKIE_LIFETIME,
-    cookie_secure=ENV_TYPE == "PROD"
+    cookie_max_age=settings.REFRESH_TOKEN_COOKIE_LIFETIME,
+    cookie_secure=settings.ENV_TYPE == "PROD"
 )
 access_refresh_token_default_cookie_transport = AccessRefreshTokensCookieTransport(
     access_token_cookie_transport=access_token_cookie_transport,
@@ -49,7 +45,7 @@ access_refresh_token_default_cookie_transport = AccessRefreshTokensCookieTranspo
 access_refresh_token_redirect_cookie_transport = AccessRefreshTokensCookieTransport(
     access_token_cookie_transport=access_token_cookie_transport,
     refresh_token_cookie_transport=refresh_token_cookie_transport,
-    redirect_url=MAIN_PAGE_URL
+    redirect_url=settings.MAIN_PAGE_URL.unicode_string()
 )
 
 

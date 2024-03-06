@@ -5,7 +5,7 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyBaseOAuthAccountTableUUID
 from sqlalchemy import Boolean, DateTime, false, select
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.core.config import GUEST_ACCOUNT_LIFETIME, UNVERIFIED_ACCOUNT_LIFETIME
+from app.core.settings import settings
 from app.db.session import AsyncDBSession, Base
 from app.dependencies.db import AsyncUOWDep
 from app.patches.auth import SQLAlchemyCustomUserDatabase
@@ -36,7 +36,7 @@ async def get_user_db(session: AsyncUOWDep):
 
 async def delete_expired_guests():
     async with AsyncUOW(AsyncDBSession) as session:
-        max_register_date = datetime.datetime.utcnow() - GUEST_ACCOUNT_LIFETIME
+        max_register_date = datetime.datetime.utcnow() - datetime.timedelta(seconds=settings.GUEST_ACCOUNT_LIFETIME)
         query = select(User).where(User.datetime_registered < max_register_date, User.is_guest)
         expired_users = await session.execute(query)
         for user in expired_users.unique().scalars():
@@ -45,7 +45,8 @@ async def delete_expired_guests():
 
 async def delete_expired_unverified_users():
     async with AsyncUOW(AsyncDBSession) as session:
-        max_register_date = datetime.datetime.utcnow() - UNVERIFIED_ACCOUNT_LIFETIME
+        max_register_date = \
+            datetime.datetime.utcnow() - datetime.timedelta(seconds=settings.UNVERIFIED_ACCOUNT_LIFETIME)
         query = select(User).where(User.datetime_registered < max_register_date, User.is_verified == false())
         expired_users = await session.execute(query)
         for user in expired_users.unique().scalars():

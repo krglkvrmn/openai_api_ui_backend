@@ -8,13 +8,13 @@ from sendgrid import Mail, SendGridAPIClient
 from starlette.requests import Request
 
 from app.auth.database import User, get_user_db
-from app.core.config import MAIN_PAGE_URL, SENDGRID_API_KEY, VERIFICATION_TOKEN_LIFETIME, VERIFICATION_TOKEN_SECRET_KEY
+from app.core.settings import settings
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     # reset_password_token_secret = ACCESS_TOKEN_SECRET_KEY
-    verification_token_secret = VERIFICATION_TOKEN_SECRET_KEY
-    verification_token_lifetime_seconds = VERIFICATION_TOKEN_LIFETIME
+    verification_token_secret = settings.VERIFICATION_TOKEN_SECRET
+    verification_token_lifetime_seconds = settings.VERIFICATION_TOKEN_LIFETIME
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         print(f"User {user.id} has registered.")
@@ -28,7 +28,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         self, user: User, token: str, request: Optional[Request] = None
     ):
         print(f"Verification requested for user {user.id}. Verification token: {token}")
-        verifiication_link = MAIN_PAGE_URL + '/verification?' + urlencode({'vt': token})
+        verifiication_link = settings.MAIN_PAGE_URL.unicode_string() + 'verification?' + urlencode({'vt': token})
         print(verifiication_link)
         # message = Mail(
         #     from_email='verification@chat.krglkvrmn.me',

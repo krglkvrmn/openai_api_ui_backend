@@ -3,7 +3,8 @@ import json
 
 import httpx
 
-from app.core.config import COMPLETIONS_API_STREAM_DEBUG_RESPONSE, OPENAI_API_ENDPOINTS
+from app.core.config import COMPLETIONS_API_STREAM_DEBUG_RESPONSE
+from app.core.settings import settings
 from app.schemas.openai.completions import ChatCompletionsRequest
 
 
@@ -23,6 +24,6 @@ class AIService:
         params = request_params.model_dump(mode="json", exclude_none=True)
         async with httpx.AsyncClient() as client:
             async with client.stream(
-                    **OPENAI_API_ENDPOINTS[endpoint_name], json=params, headers=headers) as response:
+                    **settings.OPENAI_API_ENDPOINTS[endpoint_name], json=params, headers=headers) as response:
                 async for event in response.aiter_lines():
                     yield event
