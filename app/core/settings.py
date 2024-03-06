@@ -10,11 +10,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class MetaSettings(BaseSettings):
-    ENV_FILE: FilePath
+    ENV_FILE: Optional[FilePath] = None
     SECRETS_DIR: DirectoryPath
 
 
-meta_settings = MetaSettings()
+meta_settings = MetaSettings(_case_sensitive=True)
 
 
 class OAuth2Config(BaseModel):

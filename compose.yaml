@@ -8,23 +8,21 @@ services:
     ports:
       - '8000:8000'
     secrets:
-      - key_encode_secret_key
-      - access_token_secret_key
-      - refresh_token_secret_key
-      - db_password
-      - google_oauth2_config
-      - github_oauth2_config
+      - key_encode_secret
+      - access_token_secret
+      - refresh_token_secret
+      - verification_token_secret
+      - reset_password_token_secret
+      - sendgrid_api_key
+      - postgres_password
+      - google_oauth_config
+      - github_oauth_config
     env_file:
-      - ${ENV_FILE-app/.env}
+      - ${ENV_FILE}
     environment:
+      - SECRETS_DIR=/run/secrets
       - POSTGRES_HOST=postgres_db
       - REDIS_HOST=redis
-      - ACCESS_TOKEN_SECRET_KEY_FILE=/run/secrets/access_token_secret_key
-      - REFRESH_TOKEN_SECRET_KEY_FILE=/run/secrets/refresh_token_secret_key
-      - KEY_ENCODE_SECRET_KEY_FILE=/run/secrets/key_encode_secret_key
-      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
-      - GOOGLE_OAUTH2_CONFIG_FILE=/run/secrets/google_oauth2_config
-      - GITHUB_OAUTH2_CONFIG_FILE=/run/secrets/github_oauth2_config
     depends_on:
       - postgres_db
       - redis
@@ -42,7 +40,7 @@ services:
     image: postgres:16
     restart: always
     secrets:
-      - db_password
+      - postgres_password
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
@@ -64,15 +62,21 @@ volumes:
   redis-data:
 
 secrets:
-  db_password:
+  postgres_password:
     file: ${POSTGRES_PASSWORD_FILE}
-  access_token_secret_key:
-    file: ${ACCESS_TOKEN_SECRET_KEY_FILE}
-  refresh_token_secret_key:
-    file: ${REFRESH_TOKEN_SECRET_KEY_FILE}
-  key_encode_secret_key:
-    file: ${KEY_ENCODE_SECRET_KEY_FILE}
-  google_oauth2_config:
-    file: ${GOOGLE_OAUTH2_CONFIG_FILE}
-  github_oauth2_config:
-    file: ${GITHUB_OAUTH2_CONFIG_FILE}
+  access_token_secret:
+    file: ${ACCESS_TOKEN_SECRET_FILE}
+  refresh_token_secret:
+    file: ${REFRESH_TOKEN_SECRET_FILE}
+  verification_token_secret:
+    file: ${VERIFICATION_TOKEN_SECRET_FILE}
+  reset_password_token_secret:
+    file: ${RESET_PASSWORD_TOKEN_SECRET_FILE}
+  sendgrid_api_key:
+    file: ${SENDGRID_API_KEY_FILE}
+  key_encode_secret:
+    file: ${KEY_ENCODE_SECRET_FILE}
+  google_oauth_config:
+    file: ${GOOGLE_OAUTH_CONFIG_FILE}
+  github_oauth_config:
+    file: ${GITHUB_OAUTH_CONFIG_FILE}
