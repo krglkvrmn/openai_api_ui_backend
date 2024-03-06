@@ -18,7 +18,7 @@ services:
       - google_oauth_config
       - github_oauth_config
     env_file:
-      - ${ENV_FILE}
+      - ${APP_ENV_FILE}
     environment:
       - SECRETS_DIR=/run/secrets
       - POSTGRES_HOST=postgres_db
