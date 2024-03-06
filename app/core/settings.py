@@ -3,14 +3,18 @@ from pathlib import Path
 from typing import Any, Dict, Literal, Optional, Self
 
 from pydantic import (
-    AliasChoices, BaseModel, DirectoryPath, Field, HttpUrl, PositiveInt, PostgresDsn, SecretStr,
+    AliasChoices, BaseModel, DirectoryPath, Field, FilePath, HttpUrl, PositiveInt, PostgresDsn, SecretStr,
     model_validator
 )
-from pydantic_core.core_schema import ValidationInfo, ValidatorFunctionWrapHandler
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-ENV_FILE = Path(os.getenv('ENV_FILE'))
-SECRETS_DIR = Path(os.getenv('SECRETS_DIR'))
+
+class MetaSettings(BaseSettings):
+    ENV_FILE: FilePath
+    SECRETS_DIR: DirectoryPath
+
+
+meta_settings = MetaSettings()
 
 
 class OAuth2Config(BaseModel):
@@ -20,8 +24,8 @@ class OAuth2Config(BaseModel):
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=ENV_FILE,
-        secrets_dir=SECRETS_DIR,
+        env_file=meta_settings.ENV_FILE,
+        secrets_dir=meta_settings.SECRETS_DIR,
         extra="ignore",
         validate_default=True,
         case_sensitive=False

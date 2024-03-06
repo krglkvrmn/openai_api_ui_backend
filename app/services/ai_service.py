@@ -3,7 +3,7 @@ import json
 
 import httpx
 
-from app.core.config import COMPLETIONS_API_STREAM_DEBUG_RESPONSE
+from app.services.debug_data.ai_service_debug_data import COMPLETIONS_API_STREAM_DEBUG_RESPONSE
 from app.core.settings import settings
 from app.schemas.openai.completions import ChatCompletionsRequest
 
