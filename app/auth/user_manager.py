@@ -12,7 +12,7 @@ from app.core.settings import settings
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
-    # reset_password_token_secret = ACCESS_TOKEN_SECRET_KEY
+    reset_password_token_secret = settings.RESET_PASSWORD_TOKEN_SECRET
     verification_token_secret = settings.VERIFICATION_TOKEN_SECRET.get_secret_value()
     verification_token_lifetime_seconds = settings.VERIFICATION_TOKEN_LIFETIME
 
@@ -23,6 +23,16 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         self, user: User, token: str, request: Optional[Request] = None
     ):
         print(f"User {user.id} has forgot their password. Reset token: {token}")
+        reset_password_link = settings.MAIN_PAGE_URL.unicode_string() + 'forgot-password?' + urlencode({'prt': token})
+        print(reset_password_link)
+        # message = Mail(
+        #     from_email='reset-password@chat.krglkvrmn.me',
+        #     to_emails=user.email,
+        #     subject='Reset your password',
+        #     html_content=f'Follow the link to reset your password: <a href={reset_password_link}>Reset password</a>'
+        # )
+        # sg = SendGridAPIClient(settings.SENDGRID_API_KEY.get_secret_value())
+        # sg.send(message)
 
     async def on_after_request_verify(
         self, user: User, token: str, request: Optional[Request] = None

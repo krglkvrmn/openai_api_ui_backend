@@ -1,5 +1,3 @@
-import asyncio
-
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from app.auth.database import delete_expired_guests, delete_expired_unverified_users
