@@ -25,5 +25,8 @@ class AIService:
         async with httpx.AsyncClient() as client:
             async with client.stream(
                     **settings.OPENAI_API_ENDPOINTS[endpoint_name], json=params, headers=headers) as response:
+                if response.status_code == 401:
+                    response_content = json.loads(await response.aread())
+                    yield f'data: {json.dumps(response_content)}\n\n'
                 async for event in response.aiter_lines():
                     yield event

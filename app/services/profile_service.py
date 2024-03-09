@@ -48,6 +48,7 @@ class ProfileService:
             raise HTTPException(status_code=404, detail="User does not have api keys")
 
         await session.delete(token_data)
+        await session.commit()
         return token_data
 
 
