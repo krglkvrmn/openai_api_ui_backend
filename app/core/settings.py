@@ -71,8 +71,9 @@ class Settings(BaseSettings):
     RESET_PASSWORD_TOKEN_SECRET: SecretStr
     KEY_ENCODE_SECRET: SecretStr
 
-    # Sendgrid
+    # Emails
     SENDGRID_API_KEY: SecretStr
+    SEND_EMAILS: bool = False
 
     # Oauth2 client credentials
     GOOGLE_OAUTH_CONFIG: OAuth2Config
