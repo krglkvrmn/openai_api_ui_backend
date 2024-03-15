@@ -99,7 +99,7 @@ class AccessRefreshAuthenticationBackend:
 
 class SQLAlchemyCustomUserDatabase(SQLAlchemyUserDatabase):
     async def create(self, create_dict: Dict[str, Any]) -> models.UP:
-        create_dict['is_verified'] = create_dict.get('is_guest') or create_dict.get('is_verified', False)
+        # create_dict['is_verified'] = create_dict.get('is_guest') or create_dict.get('is_verified', False)
         return await super().create(create_dict)
 
 

@@ -3,7 +3,8 @@ from pathlib import Path
 from typing import Any, Dict, Literal, Optional, Self
 
 from pydantic import (
-    AliasChoices, BaseModel, DirectoryPath, Field, FilePath, HttpUrl, PositiveInt, PostgresDsn, SecretStr,
+    AliasChoices, BaseModel, DirectoryPath, Field, FilePath, HttpUrl, PositiveFloat, PositiveInt, PostgresDsn,
+    SecretStr,
     model_validator
 )
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -73,7 +74,6 @@ class Settings(BaseSettings):
 
     # Emails
     SENDGRID_API_KEY: SecretStr
-    SEND_EMAILS: bool = False
 
     # Oauth2 client credentials
     GOOGLE_OAUTH_CONFIG: OAuth2Config
@@ -94,6 +94,10 @@ class Settings(BaseSettings):
     # Accounts lifetimes
     GUEST_ACCOUNT_LIFETIME: PositiveInt = 60
     UNVERIFIED_ACCOUNT_LIFETIME: PositiveInt = 60 * 3
+
+    # Debug
+    SEND_EMAILS: bool = False
+    RESPONSE_LATENCY: PositiveFloat = 0
 
 
     @model_validator(mode='before')

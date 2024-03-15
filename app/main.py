@@ -3,12 +3,14 @@ from fastapi import FastAPI
 from app.api.main_router import main_router
 from app.auth.routers import auth_router
 from app.core.settings import settings
-from app.middleware import cors_middleware
+from app.middleware import cors_middleware, latency_middleware
 from app.utils.schedulers import guests_deleter_scheduler, unverified_deleter_scheduler
 
 
 app = FastAPI(openapi_url=settings.OPENAPI_URL)
 app.add_middleware(cors_middleware)
+if settings.RESPONSE_LATENCY:
+    app.middleware("http")(latency_middleware)
 
 app.include_router(main_router)
 app.include_router(auth_router)
