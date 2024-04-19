@@ -1,9 +1,10 @@
-import os
 from pathlib import Path
-from typing import Any, Dict, Literal, Optional, Self
+from pathlib import Path
+from typing import Any, Dict, Literal, Optional
 
 from pydantic import (
-    AliasChoices, BaseModel, DirectoryPath, Field, FilePath, HttpUrl, PositiveFloat, PositiveInt, PostgresDsn,
+    AliasChoices, BaseModel, DirectoryPath, Field, FilePath, HttpUrl, NonNegativeFloat, PositiveInt,
+    PostgresDsn,
     SecretStr,
     model_validator
 )
@@ -97,7 +98,7 @@ class Settings(BaseSettings):
 
     # Debug
     SEND_EMAILS: bool = False
-    RESPONSE_LATENCY: PositiveFloat = 0
+    RESPONSE_LATENCY: NonNegativeFloat = 0
 
 
     @model_validator(mode='before')

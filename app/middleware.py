@@ -26,4 +26,4 @@ def add_latency_middleware_generator(latency: float):
     return _latency_middleware
 
 
-latency_middleware = add_latency_middleware_generator(latency=2)
+latency_middleware = add_latency_middleware_generator(latency=settings.RESPONSE_LATENCY)
