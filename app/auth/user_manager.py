@@ -1,10 +1,8 @@
 import uuid
 from typing import Optional
-from urllib.parse import urlencode
 
 from fastapi import BackgroundTasks, Depends
 from fastapi_users import BaseUserManager, UUIDIDMixin
-from sendgrid import Mail, SendGridAPIClient
 from starlette.requests import Request
 
 from app.auth.database import User, get_user_db
