@@ -1,3 +1,4 @@
+from pathlib import Path
 from urllib.parse import urlencode
 
 from sendgrid import Mail, SendGridAPIClient
@@ -10,12 +11,12 @@ def send_verification_email(token: str, email: str):
     if not settings.SEND_EMAILS:
         print(verifiication_link)
         return
-
+    email_html_path = settings.APP_ROOT / 'templates' / 'verification_email.html'
     message = Mail(
         from_email='verification@chat.krglkvrmn.me',
         to_emails=email,
         subject='Verify Your Email Address',
-        html_content=f'Please verify your email by following this link: <a href={verifiication_link}>Verify</b>'
+        html_content=email_html_path.read_text().format(verification_link=verifiication_link)
     )
     sg = SendGridAPIClient(settings.SENDGRID_API_KEY.get_secret_value())
     sg.send(message)
@@ -27,11 +28,12 @@ def send_forgot_password_email(token: str, email: str):
         print(reset_password_link)
         return
 
+    email_html_path = settings.APP_ROOT / 'templates' / 'password_reset_email.html'
     message = Mail(
         from_email='reset-password@chat.krglkvrmn.me',
         to_emails=email,
         subject='Reset your password',
-        html_content=f'Follow the link to reset your password: <a href={reset_password_link}>Reset password</a>'
+        html_content=email_html_path.read_text().format(reset_password_link=reset_password_link)
     )
     sg = SendGridAPIClient(settings.SENDGRID_API_KEY.get_secret_value())
     sg.send(message)
