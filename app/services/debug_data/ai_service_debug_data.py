@@ -53,7 +53,7 @@ COMPLETIONS_API_STREAM_DEBUG_RESPONSE = [
                 "content": "world ",
             },
         }]
-    }] * 20,
+    }] * 800,
     {
         "id": "chatcmpl-123",
         "object": "chat.completion.chunk",
