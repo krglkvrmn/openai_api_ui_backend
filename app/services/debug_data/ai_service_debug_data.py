@@ -1,3 +1,5 @@
+import random
+
 COMPLETIONS_API_DEBUG_RESPONSE = {
     "id": "chatcmpl-123",
     "object": "chat.completion",
@@ -17,6 +19,7 @@ COMPLETIONS_API_DEBUG_RESPONSE = {
         "total_tokens": 21
     }
 }
+
 COMPLETIONS_API_STREAM_DEBUG_RESPONSE = [
     {
         "id": "chatcmpl-123",
@@ -38,22 +41,10 @@ COMPLETIONS_API_STREAM_DEBUG_RESPONSE = [
         "choices": [{
             "index": 0,
             "delta": {
-                "content": "Hello ",
+                "content": f"Hello world {i}\n\n",
             },
         }]
-    },
-    {
-        "id": "chatcmpl-123",
-        "object": "chat.completion.chunk",
-        "created": 1677652289,
-        "model": "gpt-3.5-turbo",
-        "choices": [{
-            "index": 0,
-            "delta": {
-                "content": "world ",
-            },
-        }]
-    }] * 800,
+    } for i in range(20)],
     {
         "id": "chatcmpl-123",
         "object": "chat.completion.chunk",

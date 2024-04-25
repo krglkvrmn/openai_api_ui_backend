@@ -12,7 +12,7 @@ class AIService:
     @staticmethod
     async def debug_streamer():
         for chunk_data in COMPLETIONS_API_STREAM_DEBUG_RESPONSE:
-            await asyncio.sleep(0.01)
+            await asyncio.sleep(0.1)
             json_chunk_data = json.dumps(chunk_data)
             chunk = f'data: {json_chunk_data}\n\n'
             yield chunk.encode('utf-8')
