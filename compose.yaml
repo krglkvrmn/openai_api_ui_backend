@@ -17,6 +17,7 @@ services:
       - postgres_password
       - google_oauth_config
       - github_oauth_config
+      - title_system_prompt
     env_file:
       - ${APP_ENV_FILE}
     environment:
@@ -80,3 +81,5 @@ secrets:
     file: ${GOOGLE_OAUTH_CONFIG_FILE}
   github_oauth_config:
     file: ${GITHUB_OAUTH_CONFIG_FILE}
+  title_system_prompt:
+    file: ${TITLE_SYSTEM_PROMPT_FILE}
