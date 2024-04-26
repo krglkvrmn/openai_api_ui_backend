@@ -100,6 +100,12 @@ class Settings(BaseSettings):
     SEND_EMAILS: bool = False
     RESPONSE_LATENCY: NonNegativeFloat = 0
 
+    # Chat specific
+    TITLE_SYSTEM_PROMPT: str = None
+    TITLE_SYS_MESSAGE_START_TOKEN: str = None
+    TITLE_SYS_MESSAGE_END_TOKEN: str = None
+    TITLE_SYS_MESSAGE_MIN_LENGTH: PositiveInt = None
+    TITLE_SYS_MESSAGE_MAX_LENGTH: PositiveInt = None
 
     @model_validator(mode='before')
     @classmethod

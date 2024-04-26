@@ -45,9 +45,15 @@ class ChatCompletionsChoiceChunk(ChatCompletionsChoiceBase):
     delta: ChatCompletionsDelta
 
 
+class ChatCompletionsRequestMessage(BaseModel):
+    content: str
+    role: Author
+    name: Optional[str] = None
+
+
 class ChatCompletionsRequest(BaseModel):
     model: str
-    messages: list[ChatCompletionsMessage]
+    messages: list[ChatCompletionsRequestMessage]
     functions: Optional[list[ChatCompletionFunction]] = None
     function_call: Optional[ChatCompletionsFunctionCall] = None
     temperature: Optional[float] = None

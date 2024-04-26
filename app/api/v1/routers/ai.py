@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import json
 import uuid
@@ -8,12 +9,17 @@ from starlette.responses import StreamingResponse
 
 from app.core import crypto
 from app.core.settings import settings
+from app.db.session import AsyncDBSession
 from app.dependencies.db import AsyncUOWDep, RedisDep
 from app.dependencies.users import CurrentActiveVerifiedUserDep
+from app.schemas.app.chat import ChatRead
 from app.schemas.app.sessions import SessionToken
 from app.schemas.openai.completions import ChatCompletionsRequest
 from app.services.ai_service import AIService
+from app.services.stream_analysis import TitleProcessor
+from app.services.chat_service import ChatService
 from app.services.profile_service import ProfileService
+from app.utils.uow import AsyncUOW
 
 ai_router = APIRouter(prefix="/ai", tags=["ai"])
 
@@ -21,7 +27,7 @@ session_token_ttl = datetime.timedelta(seconds=30)
 
 
 @ai_router.post(
-    '/requestStreamingCompletion',
+    '/requestStreamingCompletion/chat/{chat_id}',
     status_code=status.HTTP_201_CREATED,
     response_model=SessionToken
 )
@@ -29,16 +35,19 @@ async def create_completion(
         request: Request,
         response: Response,
         uow: AsyncUOWDep,
+        chat_id: int,
         user: CurrentActiveVerifiedUserDep,
         redis: RedisDep,
         request_params: ChatCompletionsRequest,
         debug: bool = False
 ):
-    request_parameters = {"debug": debug, "user_id": str(user.id)}
+    request_parameters = {"debug": debug, "user_id": str(user.id), 'chat_id': chat_id}
     if not request_params.stream:
         raise HTTPException(
             status_code=422, detail=f"Cannot create a streaming completion with stream={request_params.stream}"
         )
+
+    request_params = AIService.inject_system_prompt(request_params, 'title')
 
     if not debug:
         request_api_token = request.headers.get('x-openai-auth-token')
@@ -67,7 +76,7 @@ async def create_completion(
 
 
 @ai_router.get('/streamCompletion/{session_token}')
-def stream_completion(session_token: uuid.UUID, redis: RedisDep, user: CurrentActiveVerifiedUserDep):
+async def stream_completion(session_token: uuid.UUID, redis: RedisDep, user: CurrentActiveVerifiedUserDep):
     request_parameters = redis.get(str(session_token))
     if request_parameters is None:
         raise HTTPException(status_code=410, detail="Session token for receiving a completion expired")
@@ -79,9 +88,26 @@ def stream_completion(session_token: uuid.UUID, redis: RedisDep, user: CurrentAc
     elif request_parameters.get("debug", True):
         streamer = AIService.debug_streamer()
     else:
+        async def update_chat(report: dict):
+            async with AsyncDBSession() as session:
+                await ChatService.update_chat(
+                    session=session, user=user, chat=ChatRead(
+                        id=request_parameters['chat_id'],
+                        title=report['title'],
+                        model=request_parameters['request_params']['model']
+                    )
+                )
+        system_events_processor = TitleProcessor(
+            min_length=settings.TITLE_SYS_MESSAGE_MIN_LENGTH,
+            max_length=settings.TITLE_SYS_MESSAGE_MAX_LENGTH,
+            start_token=settings.TITLE_SYS_MESSAGE_START_TOKEN,
+            end_token=settings.TITLE_SYS_MESSAGE_END_TOKEN,
+            valid_system_events_action=update_chat
+        )
         streamer = AIService.api_proxy_streamer(
             api_token=crypto.decrypt(request_parameters.get("api_token").encode()),
             request_params=ChatCompletionsRequest.model_validate(request_parameters.get("request_params")),
-            endpoint_name=request_parameters.get("endpoint_name")
+            endpoint_name=request_parameters.get("endpoint_name"),
+            system_events_processor=system_events_processor
         )
     return StreamingResponse(streamer, media_type="text/event-stream")

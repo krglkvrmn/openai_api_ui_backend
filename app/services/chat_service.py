@@ -11,7 +11,7 @@ from app.db.models.chat import Chat
 from app.db.models.message import Message
 from app.db.models.prompt import SystemPrompt
 from app.schemas import Author
-from app.schemas.app.chat import ChatBase, ChatFullCreate
+from app.schemas.app.chat import ChatBase, ChatFullCreate, ChatRead
 from app.schemas.app.message import MessageAddToChatCreate
 from app.services.common_queries import ChatQueriesMixin
 
@@ -96,7 +96,7 @@ class ChatService(ChatQueriesMixin):
         return db_prompt
 
     @classmethod
-    async def update_chat(cls, session: AsyncSession, user: UserRead, chat: ChatBase) -> Chat:
+    async def update_chat(cls, session: AsyncSession, user: UserRead, chat: ChatRead) -> Chat:
         query = cls.select_user_chat_by_id(chat_id=chat.id, user=user)
         result = await session.execute(query)
         db_chat = result.scalar_one_or_none()
