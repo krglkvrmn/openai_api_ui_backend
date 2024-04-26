@@ -14,7 +14,7 @@ from app.services.stream_analysis import StreamAnalyser, SystemEventsProcessorBa
 
 
 class AIService:
-    __SYSTEM_PROMPTS = { "title": settings.TITLE_SYSTEM_PROMPT }
+    __SYSTEM_PROMPTS = {"title": settings.TITLE_SYSTEM_PROMPT}
 
     @staticmethod
     async def debug_streamer():
