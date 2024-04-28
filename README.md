@@ -2,6 +2,8 @@
 
 This is a backend part of the application, also check out [frontend](https://github.com/krglkvrmn/openai_api_ui_frontend/tree/main)
 
+## Tech stack
+
 | Component                        | Technology                                                   |
 | -------------------------------- | ------------------------------------------------------------ |
 | Language                         | [Python 3.10+](https://www.python.org/)                      |
@@ -11,6 +13,8 @@ This is a backend part of the application, also check out [frontend](https://git
 | Authentication and authorization | Slightly patched [fastapi-users](https://fastapi-users.github.io/fastapi-users/latest/) |
 | Data validation                  | [Pydantic](https://docs.pydantic.dev/latest/)                |
 | Database migrations              | [Alembic](https://alembic.sqlalchemy.org/en/latest/)         |
+| WSGI server                      | [Gunicorn](https://gunicorn.org/)                            |
+| Reverse proxy server             | [NGINX](https://nginx.org/en/docs/?_ga=2.65749997.258183107.1714325166-1305194052.1709247764) |
 
 ## Usage 🛠️
 
@@ -92,6 +96,7 @@ pip install -r requirements.txt
 **Set up PostgreSQL database**
 
 ```bash
+# You may not need sudo -u postgres on MacOS
 sudo -u postgres createdb <your_database_name>
 sudo -u postgres psql mydatabase
 ```
@@ -99,6 +104,7 @@ sudo -u postgres psql mydatabase
 **Create postgres user**
 
 ```sql
+# Inside psql CLI
 CREATE USER <your_user_name> WITH ENCRYPTED PASSWORD '<your_password>';
 GRANT ALL PRIVILEGES ON DATABASE <your_database_name> TO <your_user_name>;
 ALTER DATABASE <your_database_name> OWNER TO <your_user_name>;
