@@ -157,4 +157,4 @@ docker compose --env-file .env.prod --env-file .env.deploy.prod up
 
 ## Endpoints
 
-An interactive API docs provided by FastAPI are available at http://localhost:8000/docs#/ by default
+Interactive API docs provided by FastAPI are available at http://localhost:8000/docs#/ by default
