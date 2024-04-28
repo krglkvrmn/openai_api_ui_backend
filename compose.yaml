@@ -25,8 +25,10 @@ services:
       - POSTGRES_HOST=postgres_db
       - REDIS_HOST=redis
     depends_on:
-      - postgres_db
-      - redis
+      postgres_db:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
   redis:
     image: redis:latest
@@ -54,7 +56,7 @@ services:
       - '5433:5432'
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 5
 
