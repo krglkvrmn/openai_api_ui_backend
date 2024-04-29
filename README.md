@@ -72,7 +72,7 @@ The application automatically loads secrets from secrets directory and thus it s
 
 ```bash
 # These variables are required to run everything related to the application
-export SECRETS_DIR=".secrets"
+export SECRETS_DIR=".secret"
 export ENV_FILE=".env.dev"
 ```
 
