@@ -44,7 +44,7 @@ class Settings(BaseSettings):
     APP_LOCAL_PORT: int = Field(default=8000, ge=0, le=65535)
     APP_PUBLIC_DOMAIN: Optional[str] = None
     APP_ORIGIN: HttpUrl
-    MAIN_PAGE_URL: HttpUrl = "http://localhost:3001"
+    MAIN_PAGE_URL: HttpUrl = "http://localhost:3000"
 
     OPENAPI_URL: str = '/openapi.json'
 
